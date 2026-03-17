@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/app/_lib/auth-client";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+
 
 const GoogleIcon = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,11 +39,20 @@ const AuthPage = () => {
   if (isPending || session) return null;
 
   return (
-    <div className="flex min-h-screen flex-col bg-foreground">
-      <div className="flex flex-1 items-center justify-center">
-        <span className="text-4xl font-bold tracking-widest text-background">
+    <div className="flex h-full flex-col bg-foreground">
+      <div className="flex flex-[2] items-end justify-center pt-20">
+        <span className="text-6xl font-bold tracking-widest text-background">
           FIT.AI
         </span>
+      </div>
+      <div className="relative h-[60vh] bg-black">
+        <Image
+          src="/login-bg.png"
+          alt=""
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
 
       <div className="bg-primary px-5 pb-10 pt-12">
