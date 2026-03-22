@@ -1,87 +1,137 @@
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import dayjs from "dayjs"; 
-import { authClient } from "./_lib/auth-client";
 import { headers } from "next/headers";
-import { getHome, getUserTrainData } from "./_lib/api/fetch-generated";
+import { Flame } from "lucide-react";
+import dayjs from "dayjs";
+import { authClient } from "./_lib/auth-client";
+import { getHome } from "./_lib/api/fetch-generated";
+import { BottomNav } from "./_components/bottom-nav";
+import { ConsistencyDay } from "./_components/consistency-day";
+import { WorkoutDayCard } from "./_components/workout-day-card";
+
+const WEEK_DAY_LABELS = ["S", "T", "Q", "Q", "S", "S", "D"];
 
 export default async function Home() {
   const session = await authClient.getSession({
     fetchOptions: {
-       headers: await headers(),
+      headers: await headers(),
     },
   });
+
   if (!session.data?.user) redirect("/auth");
 
   const today = dayjs();
-  const [homeData, trainData] = await Promise.all([
-    getHome(today.format("YYYY-MM-DD")),
-    getUserTrainData(),
-  ]);
-console.log(homeData);
+  const homeResponse = await getHome(today.format("YYYY-MM-DD"));
 
-  if (homeData.status !== 200) {
+  if (homeResponse.status !== 200) {
     throw new Error("Failed to fetch home data");
   }
+
+  const homeData = homeResponse.data;
+
+  const dayOfWeek = today.day();
+  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+  const monday = today.add(mondayOffset, "day");
+
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const date = monday.add(i, "day").format("YYYY-MM-DD");
+    const consistency = homeData.consistencyByDay[date];
+    const status = consistency?.workoutDayCompleted
+      ? ("completed" as const)
+      : consistency?.workoutDayStarted
+        ? ("started" as const)
+        : ("empty" as const);
+    return { label: WEEK_DAY_LABELS[i], status };
+  });
+
+  const userName = session.data.user.name?.split(" ")[0] ?? "Você";
+  //const coverImageUrl = homeData.todayWorkoutDay?.coverImageUrl;
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex min-h-screen flex-col bg-background pb-[88px]">
+      <section className="relative h-[296px] w-full overflow-hidden rounded-b-3xl bg-foreground">
+          <Image
+            src="/home-banner.jpg"
+            alt="Treino de hoje"
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+        <div className="absolute inset-0 bg-gradient-to-b from-foreground/10 to-foreground/80" />
+        <div className="absolute inset-0 flex flex-col justify-between p-5">
+          <span className="font-bold text-primary-foreground text-[22px] tracking-wide">
+            Fit.ai
+          </span>
+          <div className="flex items-end justify-between">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-2xl font-semibold text-primary-foreground">
+                Olá, {userName}
+              </span>
+              <span className="text-sm text-primary-foreground/70">
+                Bora treinar hoje?
+              </span>
+            </div>
+            <div className="flex items-center justify-center rounded-full bg-primary px-4 py-1.5">
+              <span className="text-sm font-semibold text-primary-foreground">
+                Bora!
+              </span>
+            </div>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      <section className="px-5 py-5">
+        <div className="mb-4 flex items-center justify-between">
+          <span className="text-lg font-semibold text-foreground">
+            Consistência
+          </span>
+          <button
+            type="button"
+            className="text-xs text-primary"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Ver histórico
+          </button>
         </div>
-      </main>
+        <div className="flex gap-3">
+          <div className="flex flex-1 items-center justify-between rounded-xl border border-border px-5 py-5">
+            {weekDays.map((day, i) => (
+              <ConsistencyDay key={i} label={day.label} status={day.status} />
+            ))}
+          </div>
+          <div className="flex w-20 flex-col items-center justify-center gap-1 rounded-xl bg-streak px-4 py-5">
+            <Flame size={16} className="text-streak-foreground" />
+            <span className="text-base font-semibold text-foreground">
+              {homeData.workoutStreak}
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-1">
+        <div className="mb-4 flex items-center justify-between">
+          <span className="text-lg font-semibold text-foreground">
+            Treino de Hoje
+          </span>
+          <button
+            type="button"
+            className="text-xs text-primary"
+          >
+            Ver treinos
+          </button>
+        </div>
+        {homeData.todayWorkoutDay ? (
+          <WorkoutDayCard workoutDay={homeData.todayWorkoutDay} />
+        ) : (
+          <div className="flex h-[200px] items-center justify-center rounded-xl border border-border">
+            <span className="text-sm text-muted-foreground">
+              Sem treino para hoje
+            </span>
+          </div>
+        )}
+      </section>
+
+      <BottomNav />
     </div>
   );
 }
