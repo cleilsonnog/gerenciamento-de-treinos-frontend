@@ -23,7 +23,7 @@ export function WorkoutDayCard({ workoutDay }: WorkoutDayCardProps) {
   );
   
   return (
-    <Link href={`/workout/${workoutDay.workoutPlanId}/day/${workoutDay.id}`}>
+    <Link href={`/workout-plans/${workoutDay.workoutPlanId}/days/${workoutDay.id}`}>
       <div className="relative h-[200px] w-full overflow-hidden rounded-xl bg-foreground">
         {workoutDay.coverImageUrl && (
           <Image

@@ -131,7 +131,13 @@ export default async function Home() {
         )}
       </section>
 
-      <BottomNav />
+      <BottomNav
+        calendarHref={
+          homeData.todayWorkoutDay
+            ? `/workout-plans/${homeData.todayWorkoutDay.workoutPlanId}/days/${homeData.todayWorkoutDay.id}`
+            : undefined
+        }
+      />
     </div>
   );
 }
