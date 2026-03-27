@@ -134,7 +134,7 @@ export default async function Home() {
       <BottomNav
         calendarHref={
           homeData.todayWorkoutDay
-            ? `/workout-plans/${homeData.todayWorkoutDay.workoutPlanId}/days/${homeData.todayWorkoutDay.id}`
+            ? `/workout-plans/${homeData.todayWorkoutDay.workoutPlanId}`
             : undefined
         }
       />
