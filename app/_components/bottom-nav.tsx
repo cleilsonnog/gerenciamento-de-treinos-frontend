@@ -57,12 +57,15 @@ export function BottomNav({ calendarHref }: Props) {
       >
         <Sparkles size={24} />
       </button>
-      <button
-        type="button"
-        className="flex h-12 w-12 items-center justify-center rounded-full text-foreground"
+      <Link
+        href="/stats"
+        className={cn(
+          "flex h-12 w-12 items-center justify-center rounded-full text-foreground",
+          pathname === "/stats" && "text-primary"
+        )}
       >
         <ChartNoAxesColumn size={24} />
-      </button>
+      </Link>
       <button
         type="button"
         className="flex h-12 w-12 items-center justify-center rounded-full text-foreground"
