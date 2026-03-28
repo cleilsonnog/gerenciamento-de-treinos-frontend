@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { Weight, Ruler, BicepsFlexed, User, Settings } from "lucide-react";
 import { authClient } from "@/app/_lib/auth-client";
+import { getUserTrainData } from "@/app/_lib/api/fetch-generated";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/app/_components/bottom-nav";
@@ -26,6 +27,21 @@ export default async function ProfilePage() {
         .slice(0, 2)
         .toUpperCase()
     : "?";
+
+  const trainDataResponse = await getUserTrainData();
+  const trainData =
+    trainDataResponse.status === 200 ? trainDataResponse.data : null;
+
+  const weightInKg = trainData
+    ? (trainData.weightInGrams / 1000).toFixed(1)
+    : "--";
+  const heightInCm = trainData
+    ? String(trainData.heightInCentimeters)
+    : "--";
+  const bodyFat = trainData
+    ? `${trainData.bodyFatPercentage}%`
+    : "--";
+  const age = trainData ? String(trainData.age) : "--";
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-[88px]">
@@ -53,10 +69,10 @@ export default async function ProfilePage() {
         </div>
 
         <div className="grid w-full grid-cols-2 gap-3">
-          <StatCard icon={Weight} value="78.5" unit="Kg" />
-          <StatCard icon={Ruler} value="178" unit="Cm" />
-          <StatCard icon={BicepsFlexed} value="12-15%" unit="Gc" />
-          <StatCard icon={User} value="26" unit="Anos" />
+          <StatCard icon={Weight} value={weightInKg} unit="Kg" />
+          <StatCard icon={Ruler} value={heightInCm} unit="Cm" />
+          <StatCard icon={BicepsFlexed} value={bodyFat} unit="Gc" />
+          <StatCard icon={User} value={age} unit="Anos" />
         </div>
 
         <LogoutButton />
