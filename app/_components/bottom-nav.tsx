@@ -66,12 +66,15 @@ export function BottomNav({ calendarHref }: Props) {
       >
         <ChartNoAxesColumn size={24} />
       </Link>
-      <button
-        type="button"
-        className="flex h-12 w-12 items-center justify-center rounded-full text-foreground"
+      <Link
+        href="/profile"
+        className={cn(
+          "flex h-12 w-12 items-center justify-center rounded-full text-foreground",
+          pathname === "/profile" && "text-primary"
+        )}
       >
         <UserRound size={24} />
-      </button>
+      </Link>
     </nav>
   );
 }

@@ -1,0 +1,68 @@
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
+import { Weight, Ruler, BicepsFlexed, User, Settings } from "lucide-react";
+import { authClient } from "@/app/_lib/auth-client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { BottomNav } from "@/app/_components/bottom-nav";
+import { StatCard } from "./_components/stat-card";
+import { LogoutButton } from "./_components/logout-button";
+
+export default async function ProfilePage() {
+  const session = await authClient.getSession({
+    fetchOptions: {
+      headers: await headers(),
+    },
+  });
+
+  if (!session.data?.user) redirect("/auth");
+
+  const user = session.data.user;
+  const initials = user.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "?";
+
+  return (
+    <div className="flex min-h-screen flex-col bg-background pb-[88px]">
+      <header className="flex h-14 items-center px-5">
+        <span className="text-[22px] font-bold text-foreground">Fit.ai</span>
+      </header>
+
+      <section className="flex flex-col items-center gap-6 px-5 pt-5">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Avatar className="size-[52px]">
+              <AvatarImage src={user.image ?? undefined} alt={user.name} />
+              <AvatarFallback className="text-lg">{initials}</AvatarFallback>
+            </Avatar>
+            <div className="flex flex-col gap-1.5">
+              <span className="text-lg font-semibold text-foreground">
+                {user.name}
+              </span>
+              <span className="text-sm text-foreground/70">Plano Básico</span>
+            </div>
+          </div>
+          <Button variant="ghost" size="icon" className="size-11">
+            <Settings size={20} className="text-foreground" />
+          </Button>
+        </div>
+
+        <div className="grid w-full grid-cols-2 gap-3">
+          <StatCard icon={Weight} value="78.5" unit="Kg" />
+          <StatCard icon={Ruler} value="178" unit="Cm" />
+          <StatCard icon={BicepsFlexed} value="12-15%" unit="Gc" />
+          <StatCard icon={User} value="26" unit="Anos" />
+        </div>
+
+        <LogoutButton />
+      </section>
+
+      <BottomNav />
+    </div>
+  );
+}
