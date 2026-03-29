@@ -28,7 +28,8 @@ export default async function StatsPage() {
   const from = today.subtract(2, "month").startOf("month").format("YYYY-MM-DD");
   const to = today.endOf("month").format("YYYY-MM-DD");
 
-  const statsResponse = await getStats({ from, to });
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const statsResponse = await getStats({ from, to, timezone });
 
   if (statsResponse.status !== 200) {
     throw new Error("Failed to fetch stats");

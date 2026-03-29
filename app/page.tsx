@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { Flame } from "lucide-react";
@@ -21,7 +22,12 @@ export default async function Home() {
   if (!session.data?.user) redirect("/auth");
 
   const today = dayjs();
-  const homeResponse = await getHome(today.format("YYYY-MM-DD"));
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const homeResponse = await getHome(
+    today.format("YYYY-MM-DD"),
+    { timezone },
+    { cache: "no-store" },
+  );
 
   if (homeResponse.status !== 200) {
     throw new Error("Failed to fetch home data");
@@ -86,12 +92,9 @@ export default async function Home() {
           <span className="text-lg font-semibold text-foreground">
             Consistência
           </span>
-          <button
-            type="button"
-            className="text-xs text-primary"
-          >
+          <Link href="/stats" className="text-xs text-primary">
             Ver histórico
-          </button>
+          </Link>
         </div>
         <div className="flex gap-3">
           <div className="flex flex-1 items-center justify-between rounded-xl border border-border px-5 py-5">
