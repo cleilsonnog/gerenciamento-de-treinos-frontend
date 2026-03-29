@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { CircleCheck, CirclePercent, Hourglass } from "lucide-react";
 import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
-import { getStats } from "@/app/_lib/api/fetch-generated";
+import { getStats, getUserTrainData, getHome } from "@/app/_lib/api/fetch-generated";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { StreakBanner } from "./_components/streak-banner";
 import { ConsistencyHeatmap } from "./_components/consistency-heatmap";
@@ -25,6 +25,18 @@ export default async function StatsPage() {
   if (!session.data?.user) redirect("/auth");
 
   const today = dayjs();
+
+  const [trainDataResponse, homeResponse] = await Promise.all([
+    getUserTrainData({ cache: "no-store" }),
+    getHome(today.format("YYYY-MM-DD"), undefined, { cache: "no-store" }),
+  ]);
+
+  const hasNoTrainData =
+    trainDataResponse.status !== 200 || trainDataResponse.data === null;
+  const hasNoActivePlan =
+    homeResponse.status !== 200 || !homeResponse.data.activeWorkoutPlanId;
+
+  if (hasNoTrainData || hasNoActivePlan) redirect("/onboarding");
   const from = today.subtract(2, "month").startOf("month").format("YYYY-MM-DD");
   const to = today.endOf("month").format("YYYY-MM-DD");
 

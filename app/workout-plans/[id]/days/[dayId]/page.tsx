@@ -2,8 +2,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { Calendar, Dumbbell, Timer } from "lucide-react";
+import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
-import { getWorkoutDay } from "@/app/_lib/api/fetch-generated";
+import { getWorkoutDay, getUserTrainData, getHome } from "@/app/_lib/api/fetch-generated";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "./_components/back-button";
@@ -32,6 +33,18 @@ export default async function WorkoutDayPage({ params }: PageProps) {
   });
 
   if (!session.data?.user) redirect("/auth");
+
+  const [trainDataResponse, homeResponse] = await Promise.all([
+    getUserTrainData({ cache: "no-store" }),
+    getHome(dayjs().format("YYYY-MM-DD"), undefined, { cache: "no-store" }),
+  ]);
+
+  const hasNoTrainData =
+    trainDataResponse.status !== 200 || trainDataResponse.data === null;
+  const hasNoActivePlan =
+    homeResponse.status !== 200 || !homeResponse.data.activeWorkoutPlanId;
+
+  if (hasNoTrainData || hasNoActivePlan) redirect("/onboarding");
 
   const { id, dayId } = await params;
   const response = await getWorkoutDay(id, dayId);

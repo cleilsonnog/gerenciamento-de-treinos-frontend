@@ -2,8 +2,9 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { Goal } from "lucide-react";
+import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
-import { getWorkoutPlan } from "@/app/_lib/api/fetch-generated";
+import { getWorkoutPlan, getUserTrainData, getHome } from "@/app/_lib/api/fetch-generated";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,6 +29,18 @@ export default async function WorkoutPlanPage({ params }: PageProps) {
   });
 
   if (!session.data?.user) redirect("/auth");
+
+  const [trainDataResponse, homeResponse] = await Promise.all([
+    getUserTrainData({ cache: "no-store" }),
+    getHome(dayjs().format("YYYY-MM-DD"), undefined, { cache: "no-store" }),
+  ]);
+
+  const hasNoTrainData =
+    trainDataResponse.status !== 200 || trainDataResponse.data === null;
+  const hasNoActivePlan =
+    homeResponse.status !== 200 || !homeResponse.data.activeWorkoutPlanId;
+
+  if (hasNoTrainData || hasNoActivePlan) redirect("/onboarding");
 
   const response = await getWorkoutPlan(id);
 

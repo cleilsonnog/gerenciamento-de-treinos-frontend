@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { Weight, Ruler, BicepsFlexed, User, Settings } from "lucide-react";
+import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
-import { getUserTrainData } from "@/app/_lib/api/fetch-generated";
+import { getUserTrainData, getHome } from "@/app/_lib/api/fetch-generated";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/app/_components/bottom-nav";
@@ -18,6 +19,18 @@ export default async function ProfilePage() {
 
   if (!session.data?.user) redirect("/auth");
 
+  const [trainDataResponse, homeResponse] = await Promise.all([
+    getUserTrainData({ cache: "no-store" }),
+    getHome(dayjs().format("YYYY-MM-DD"), undefined, { cache: "no-store" }),
+  ]);
+
+  const hasNoTrainData =
+    trainDataResponse.status !== 200 || trainDataResponse.data === null;
+  const hasNoActivePlan =
+    homeResponse.status !== 200 || !homeResponse.data.activeWorkoutPlanId;
+
+  if (hasNoTrainData || hasNoActivePlan) redirect("/onboarding");
+
   const user = session.data.user;
   const initials = user.name
     ? user.name
@@ -28,7 +41,6 @@ export default async function ProfilePage() {
         .toUpperCase()
     : "?";
 
-  const trainDataResponse = await getUserTrainData();
   const trainData =
     trainDataResponse.status === 200 ? trainDataResponse.data : null;
 

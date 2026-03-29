@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { Flame } from "lucide-react";
 import dayjs from "dayjs";
 import { authClient } from "./_lib/auth-client";
-import { getHome } from "./_lib/api/fetch-generated";
+import { getHome, getUserTrainData } from "./_lib/api/fetch-generated";
 import { BottomNav } from "./_components/bottom-nav";
 import { ConsistencyDay } from "./_components/consistency-day";
 import { WorkoutDayCard } from "./_components/workout-day-card";
@@ -23,15 +23,17 @@ export default async function Home() {
 
   const today = dayjs();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const homeResponse = await getHome(
-    today.format("YYYY-MM-DD"),
-    { timezone },
-    { cache: "no-store" },
-  );
+  const [homeResponse, trainDataResponse] = await Promise.all([
+    getHome(today.format("YYYY-MM-DD"), { timezone }, { cache: "no-store" }),
+    getUserTrainData({ cache: "no-store" }),
+  ]);
 
-  if (homeResponse.status !== 200) {
-    throw new Error("Failed to fetch home data");
-  }
+  const hasNoTrainData =
+    trainDataResponse.status !== 200 || trainDataResponse.data === null;
+  const hasNoActivePlan =
+    homeResponse.status !== 200 || !homeResponse.data.activeWorkoutPlanId;
+
+  if (hasNoTrainData || hasNoActivePlan) redirect("/onboarding");
 
   const homeData = homeResponse.data;
 
