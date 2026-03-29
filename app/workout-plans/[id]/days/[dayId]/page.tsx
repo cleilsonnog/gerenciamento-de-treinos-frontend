@@ -1,12 +1,13 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import { Calendar, CircleHelp, Dumbbell, Timer, Zap } from "lucide-react";
+import { Calendar, Dumbbell, Timer } from "lucide-react";
 import { authClient } from "@/app/_lib/auth-client";
 import { getWorkoutDay } from "@/app/_lib/api/fetch-generated";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "./_components/back-button";
+import { ExerciseCard } from "./_components/exercise-card";
 
 import { StartWorkoutButton } from "./_components/start-workout-button";
 import { MarkAsCompletedButton } from "./_components/mark-as-completed-button";
@@ -116,26 +117,13 @@ export default async function WorkoutDayPage({ params }: PageProps) {
 
       <div className="mx-5 mt-6 flex flex-col divide-y divide-border">
         {workoutDay.exercises.map((exercise) => (
-          <div key={exercise.id} className="flex flex-col gap-2 py-4">
-            <div className="flex items-center justify-between">
-              <span className="text-base font-semibold">{exercise.name}</span>
-              <Button variant="ghost" size="icon">
-                <CircleHelp size={20} className="text-muted-foreground" />
-              </Button>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-                {exercise.sets} séries
-              </span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-                {exercise.reps} reps
-              </span>
-              <span className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-                <Zap size={10} />
-                {exercise.restTimeInSeconds}s
-              </span>
-            </div>
-          </div>
+          <ExerciseCard
+            key={exercise.id}
+            name={exercise.name}
+            sets={exercise.sets}
+            reps={exercise.reps}
+            restTimeInSeconds={exercise.restTimeInSeconds}
+          />
         ))}
       </div>
 

@@ -10,6 +10,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useChatState } from "./chat/use-chat-state";
 
 type Props = {
   calendarHref?: string;
@@ -18,6 +19,7 @@ type Props = {
 export function BottomNav({ calendarHref }: Props) {
   const pathname = usePathname();
   const isCalendarActive = pathname.startsWith("/workout-plans");
+  const { openChat } = useChatState();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 flex items-center justify-around bg-background px-6 pb-safe pt-5 h-[88px]">
@@ -53,6 +55,7 @@ export function BottomNav({ calendarHref }: Props) {
       )}
       <button
         type="button"
+        onClick={() => openChat()}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground"
       >
         <Sparkles size={24} />

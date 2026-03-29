@@ -39,6 +39,7 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
   --color-streak: var(--streak);
+  --color-online: var(--online);
   --color-streak-foreground: var(--streak-foreground);
   --color-streak-banner-active-from: var(--streak-banner-active-from);
   --color-streak-banner-active-to: var(--streak-banner-active-to);
