@@ -12,6 +12,16 @@ import { ExerciseCard } from "./_components/exercise-card";
 
 import { StartWorkoutButton } from "./_components/start-workout-button";
 import { MarkAsCompletedButton } from "./_components/mark-as-completed-button";
+import { WorkoutTimer } from "./_components/workout-timer";
+
+function formatCompletedDuration(startedAt: string, completedAt: string) {
+  const seconds = Math.floor(
+    (new Date(completedAt).getTime() - new Date(startedAt).getTime()) / 1000
+  );
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+}
 
 const WEEK_DAY_LABELS: Record<string, string> = {
   MONDAY: "Segunda",
@@ -61,7 +71,16 @@ export default async function WorkoutDayPage({ params }: PageProps) {
   const inProgressSession = workoutDay.sessions.find(
     (s) => s.startedAt && !s.completedAt
   );
-  const hasCompletedSession = workoutDay.sessions.some((s) => s.completedAt);
+  const completedSession = workoutDay.sessions.find((s) => s.completedAt);
+  const hasCompletedSession = !!completedSession;
+
+  const completedDuration =
+    completedSession?.startedAt && completedSession?.completedAt
+      ? formatCompletedDuration(
+          completedSession.startedAt,
+          completedSession.completedAt
+        )
+      : null;
 
   const dayLabel =
     WEEK_DAY_LABELS[workoutDay.weekDay] ?? workoutDay.weekDay;
@@ -112,8 +131,15 @@ export default async function WorkoutDayPage({ params }: PageProps) {
                 </div>
               </div>
             </div>
-            {!inProgressSession &&
-              (hasCompletedSession ? (
+            {inProgressSession?.startedAt ? (
+              <WorkoutTimer startedAt={inProgressSession.startedAt} />
+            ) : hasCompletedSession ? (
+              <div className="flex flex-col items-end gap-1">
+                {completedDuration && (
+                  <span className="text-xs font-medium text-primary-foreground/70">
+                    Tempo: {completedDuration}
+                  </span>
+                )}
                 <Button
                   variant="ghost"
                   size="sm"
@@ -121,9 +147,10 @@ export default async function WorkoutDayPage({ params }: PageProps) {
                 >
                   Concluído!
                 </Button>
-              ) : (
-                <StartWorkoutButton workoutPlanId={id} workoutDayId={dayId} />
-              ))}
+              </div>
+            ) : (
+              <StartWorkoutButton workoutPlanId={id} workoutDayId={dayId} />
+            )}
           </div>
         </div>
       </div>
