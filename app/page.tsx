@@ -19,7 +19,7 @@ export default async function Home() {
     },
   });
 
-  if (!session.data?.user) redirect("/auth");
+  if (!session.data?.user) redirect("/landing");
 
   const today = dayjs();
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
