@@ -36,7 +36,7 @@ export function AboutSection() {
             Tudo que você precisa para treinar melhor
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            O Fit.ai combina tecnologia de ponta com ciência do exercício para
+            O Treino.IA combina tecnologia de ponta com ciência do exercício para
             oferecer a melhor experiência de treino.
           </p>
         </div>

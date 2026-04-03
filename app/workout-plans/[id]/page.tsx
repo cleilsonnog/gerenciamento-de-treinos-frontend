@@ -73,7 +73,7 @@ export default async function WorkoutPlanPage({ params }: PageProps) {
         <div className="absolute inset-0 bg-gradient-to-b from-foreground/10 to-foreground/80" />
         <div className="absolute inset-0 flex flex-col justify-between p-5">
           <span className="font-bold text-primary-foreground text-[22px] tracking-wide">
-            Fit.ai
+            Treino.IA
           </span>
           <div className="flex items-end justify-between">
             <div className="flex flex-col gap-1.5">

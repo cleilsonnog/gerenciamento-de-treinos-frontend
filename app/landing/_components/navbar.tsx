@@ -6,7 +6,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-3">
         <Link href="/landing" className="text-lg font-bold text-foreground">
-          Fit.ai
+          Treino.IA
         </Link>
         <nav className="hidden items-center gap-6 sm:flex">
           <a

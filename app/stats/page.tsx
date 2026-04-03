@@ -53,7 +53,7 @@ export default async function StatsPage() {
     <div className="flex min-h-screen flex-col bg-background pb-[88px]">
       <header className="flex h-14 items-center px-5">
         <span className="font-bold text-foreground text-[22px] tracking-wide">
-          Fit.ai
+          Treino.IA
         </span>
       </header>
 

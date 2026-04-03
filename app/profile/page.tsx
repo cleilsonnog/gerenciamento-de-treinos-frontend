@@ -92,7 +92,7 @@ export default async function ProfilePage() {
   return (
     <div className="flex min-h-screen flex-col bg-background pb-[88px]">
       <header className="flex h-14 items-center px-5">
-        <span className="text-[22px] font-bold text-foreground">Fit.ai</span>
+        <span className="text-[22px] font-bold text-foreground">Treino.IA</span>
       </header>
 
       <section className="flex flex-col items-center gap-6 px-5 pt-5">

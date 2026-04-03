@@ -53,7 +53,7 @@ export function AiSection() {
                     <Bot size={16} className="text-primary-foreground" />
                   </div>
                   <span className="text-sm font-medium text-foreground">
-                    Fit.ai
+                    Treino.IA
                   </span>
                 </div>
                 <div className="rounded-lg bg-secondary p-3">

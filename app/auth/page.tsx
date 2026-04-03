@@ -42,7 +42,7 @@ const AuthPage = () => {
     <div className="flex h-full flex-col bg-foreground">
       <div className="flex flex-[2] items-end justify-center pt-20">
         <span className="text-6xl font-bold tracking-widest text-background">
-          FIT.AI
+          Treino.IA
         </span>
       </div>
       <div className="relative h-[60vh] bg-black">
@@ -71,7 +71,7 @@ const AuthPage = () => {
         </div>
 
         <p className="mt-16 text-center text-xs text-primary-foreground/70">
-          ©2026 Copyright FIT.AI. Todos os direitos reservados
+          ©2026 Copyright Treino.IA. Todos os direitos reservados
         </p>
       </div>
     </div>
