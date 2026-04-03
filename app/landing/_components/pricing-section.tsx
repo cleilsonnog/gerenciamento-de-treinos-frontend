@@ -1,9 +1,24 @@
-import Link from "next/link";
-import { Check } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { authClient } from "@/app/_lib/auth-client";
 
-const plans = [
+type PlanType = "MONTHLY" | "QUARTERLY";
+
+const plans: Array<{
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  pricePerMonth?: string;
+  features: string[];
+  highlighted: boolean;
+  planType: PlanType;
+}> = [
   {
     name: "Mensal",
     price: "14,90",
@@ -16,6 +31,7 @@ const plans = [
       "Treinos ilimitados",
     ],
     highlighted: false,
+    planType: "MONTHLY",
   },
   {
     name: "Trimestral",
@@ -30,10 +46,47 @@ const plans = [
       "Relatórios avançados",
     ],
     highlighted: true,
+    planType: "QUARTERLY",
   },
 ];
 
 export function PricingSection() {
+  const router = useRouter();
+  const [loadingPlan, setLoadingPlan] = useState<PlanType | null>(null);
+
+  const handleSubscribe = async (planType: PlanType) => {
+    setLoadingPlan(planType);
+
+    try {
+      const session = await authClient.getSession();
+
+      if (!session.data?.user) {
+        router.push("/auth");
+        return;
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ plan: planType }),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to create checkout session");
+      }
+
+      const data = await response.json();
+      window.location.href = data.checkoutUrl;
+    } catch (error) {
+      console.error("Checkout error:", error);
+      setLoadingPlan(null);
+    }
+  };
+
   return (
     <section id="planos" className="bg-secondary/50 px-5 py-20">
       <div className="mx-auto max-w-4xl">
@@ -94,11 +147,19 @@ export function PricingSection() {
               </ul>
               <div className="mt-8">
                 <Button
-                  asChild
                   className="w-full"
                   variant={plan.highlighted ? "default" : "outline"}
+                  disabled={loadingPlan !== null}
+                  onClick={() => handleSubscribe(plan.planType)}
                 >
-                  <Link href="/auth">Assinar agora</Link>
+                  {loadingPlan === plan.planType ? (
+                    <>
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                      Redirecionando...
+                    </>
+                  ) : (
+                    "Assinar agora"
+                  )}
                 </Button>
               </div>
             </div>

@@ -9,6 +9,30 @@ import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { StatCard } from "./_components/stat-card";
 import { LogoutButton } from "./_components/logout-button";
+import { SubscriptionCard } from "./_components/subscription-card";
+import { customFetch } from "@/app/_lib/fetch";
+
+interface SubscriptionData {
+  plan: string;
+  subscriptionStatus: string | null;
+  stripeCustomerId: string | null;
+  subscriptionId: string | null;
+  trialEndsAt: string;
+  isTrialActive: boolean;
+  hasAccess: boolean;
+}
+
+interface SubscriptionResponse {
+  data: SubscriptionData;
+  status: number;
+}
+
+const getSubscription = async (): Promise<SubscriptionResponse> => {
+  return customFetch<SubscriptionResponse>("/subscription", {
+    method: "GET",
+    cache: "no-store",
+  });
+};
 
 export default async function ProfilePage() {
   const session = await authClient.getSession({
@@ -19,10 +43,12 @@ export default async function ProfilePage() {
 
   if (!session.data?.user) redirect("/auth");
 
-  const [trainDataResponse, homeResponse] = await Promise.all([
-    getUserTrainData({ cache: "no-store" }),
-    getHome(dayjs().format("YYYY-MM-DD"), undefined, { cache: "no-store" }),
-  ]);
+  const [trainDataResponse, homeResponse, subscriptionResponse] =
+    await Promise.all([
+      getUserTrainData({ cache: "no-store" }),
+      getHome(dayjs().format("YYYY-MM-DD"), undefined, { cache: "no-store" }),
+      getSubscription(),
+    ]);
 
   const hasNoTrainData =
     trainDataResponse.status !== 200 || trainDataResponse.data === null;
@@ -44,15 +70,23 @@ export default async function ProfilePage() {
   const trainData =
     trainDataResponse.status === 200 ? trainDataResponse.data : null;
 
+  const subscription =
+    subscriptionResponse.status === 200 ? subscriptionResponse.data : null;
+
+  const planLabel =
+    subscription?.plan === "MONTHLY"
+      ? "Mensal"
+      : subscription?.plan === "QUARTERLY"
+        ? "Trimestral"
+        : "Gratuito";
+
   const weightInKg = trainData
     ? (trainData.weightInGrams / 1000).toFixed(1)
     : "--";
   const heightInCm = trainData
     ? String(trainData.heightInCentimeters)
     : "--";
-  const bodyFat = trainData
-    ? `${trainData.bodyFatPercentage}%`
-    : "--";
+  const bodyFat = trainData ? `${trainData.bodyFatPercentage}%` : "--";
   const age = trainData ? String(trainData.age) : "--";
 
   return (
@@ -72,13 +106,23 @@ export default async function ProfilePage() {
               <span className="text-lg font-semibold text-foreground">
                 {user.name}
               </span>
-              <span className="text-sm text-foreground/70">Plano Básico</span>
+              <span className="text-sm text-foreground/70">
+                Plano {planLabel}
+              </span>
             </div>
           </div>
           <Button variant="ghost" size="icon" className="size-11">
             <Settings size={20} className="text-foreground" />
           </Button>
         </div>
+
+        <SubscriptionCard
+          plan={subscription?.plan ?? "FREE"}
+          subscriptionStatus={subscription?.subscriptionStatus ?? null}
+          trialEndsAt={subscription?.trialEndsAt ?? new Date().toISOString()}
+          isTrialActive={subscription?.isTrialActive ?? false}
+          hasAccess={subscription?.hasAccess ?? false}
+        />
 
         <div className="grid w-full grid-cols-2 gap-3">
           <StatCard icon={Weight} value={weightInKg} unit="Kg" />
