@@ -15,22 +15,25 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://treinoia.nogueiradev.com"),
   title: {
     default: "TreinoIA",
     template: "%s | TreinoIA",
   },
   description:
     "Gerencie seus treinos com inteligência artificial. Crie planos personalizados, acompanhe sua evolução e mantenha consistência com o TreinoIA.",
+  keywords: ["treino", "inteligência artificial", "IA", "treino inteligente", "treino personalizado", "treino com IA", "treino com inteligência artificial","fitness", "plano de treino"],
+
 
   openGraph: {
-    title: "TreinoIA",
+    title: "TreinoIA - Treinos com IA",
     description:
       "Treinos inteligentes com IA. Evolua com consistência e acompanhamento personalizado.",
-    url: "https://seu-dominio.com", // 🔥 troca depois
+    url: "https://treinoia.nogueiradev.com",
     siteName: "TreinoIA",
     images: [
       {
-        url: "/og-image.png", // 🔥 vamos criar isso abaixo
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "TreinoIA - Plataforma de treinos com IA",
@@ -59,7 +62,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

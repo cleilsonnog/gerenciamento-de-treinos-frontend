@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Send } from "lucide-react";
+import emailjs from "@emailjs/browser";
+import { Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,11 +25,15 @@ const contactSchema = z.object({
 
 type ContactFormValues = z.infer<typeof contactSchema>;
 
-async function sendContactMessage(_data: ContactFormValues) {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-}
+type FeedbackState = {
+  type: "success" | "error";
+  message: string;
+} | null;
 
 export function ContactSection() {
+  const [isPending, setIsPending] = useState(false);
+  const [feedback, setFeedback] = useState<FeedbackState>(null);
+
   const form = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
@@ -36,9 +42,34 @@ export function ContactSection() {
     },
   });
 
-  const onSubmit = (data: ContactFormValues) => {
-    sendContactMessage(data);
-    form.reset();
+  const onSubmit = async (data: ContactFormValues) => {
+    setIsPending(true);
+    setFeedback(null);
+
+    try {
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        {
+          from_email: data.email,
+          message: data.message,
+        },
+        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! },
+      );
+
+      setFeedback({
+        type: "success",
+        message: "Mensagem enviada com sucesso! Responderemos em breve.",
+      });
+      form.reset();
+    } catch {
+      setFeedback({
+        type: "error",
+        message: "Erro ao enviar mensagem. Tente novamente.",
+      });
+    } finally {
+      setIsPending(false);
+    }
   };
 
   return (
@@ -90,9 +121,26 @@ export function ContactSection() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full gap-2">
-                <Send size={16} />
-                Enviar mensagem
+
+              {feedback && (
+                <p
+                  className={`text-center text-sm ${
+                    feedback.type === "success"
+                      ? "text-primary"
+                      : "text-destructive"
+                  }`}
+                >
+                  {feedback.message}
+                </p>
+              )}
+
+              <Button type="submit" className="w-full gap-2" disabled={isPending}>
+                {isPending ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Send size={16} />
+                )}
+                {isPending ? "Enviando..." : "Enviar mensagem"}
               </Button>
             </form>
           </Form>
