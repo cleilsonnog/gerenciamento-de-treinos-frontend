@@ -59,7 +59,7 @@ export default async function Home() {
     <div className="flex min-h-screen flex-col bg-background pb-[88px]">
       <section className="relative h-[296px] w-full overflow-hidden rounded-b-3xl bg-foreground">
           <Image
-            src="/home-banner.jpg"
+            src="/Braço forte com kettlebell e IA.png"
             alt="Treino de hoje"
             fill
             sizes="100vw"

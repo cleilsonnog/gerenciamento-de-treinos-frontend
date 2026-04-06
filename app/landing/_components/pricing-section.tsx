@@ -88,84 +88,120 @@ export function PricingSection() {
   };
 
   return (
-    <section id="planos" className="bg-secondary/50 px-5 py-20">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
-            Planos e preços
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Escolha o plano que mais combina com você e comece a treinar com
-            inteligência.
-          </p>
-        </div>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {plans.map((plan) => (
-            <div
-              key={plan.name}
-              className={`relative flex flex-col rounded-2xl border bg-card p-8 ${
-                plan.highlighted
-                  ? "border-primary shadow-lg shadow-primary/10"
-                  : "border-border"
-              }`}
-            >
-              {plan.highlighted && (
-                <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  Mais popular
-                </Badge>
-              )}
-              <h3 className="text-xl font-semibold text-foreground">
-                {plan.name}
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {plan.description}
-              </p>
-              <div className="mt-6 flex items-baseline gap-1">
-                <span className="text-sm text-muted-foreground">R$</span>
-                <span className="text-4xl font-bold text-foreground">
-                  {plan.price}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  {plan.period}
-                </span>
-              </div>
-              {plan.pricePerMonth && (
-                <p className="mt-1 text-xs text-muted-foreground">
-                  equivalente a R$ {plan.pricePerMonth}/mês
-                </p>
-              )}
-              <ul className="mt-6 flex flex-col gap-3">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-2 text-sm">
-                    <Check
-                      size={16}
-                      className="shrink-0 text-primary"
-                    />
-                    <span className="text-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8">
-                <Button
-                  className="w-full"
-                  variant={plan.highlighted ? "default" : "outline"}
-                  disabled={loadingPlan !== null}
-                  onClick={() => handleSubscribe(plan.planType)}
-                >
-                  {loadingPlan === plan.planType ? (
-                    <>
-                      <Loader2 className="mr-2 size-4 animate-spin" />
-                      Redirecionando...
-                    </>
-                  ) : (
-                    "Assinar agora"
-                  )}
-                </Button>
-              </div>
+<section id="planos" className="relative px-5 py-24 overflow-hidden">
+  
+  {/* 🔥 Glow de fundo */}
+  <div className="absolute inset-0 -z-10 bg-gradient-to-b from-secondary/40 via-transparent to-transparent" />
+  <div className="absolute top-0 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-primary/20 blur-3xl opacity-30" />
+
+  <div className="mx-auto max-w-4xl">
+    
+    {/* Header */}
+    <div className="mb-16 text-center">
+      <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+        Planos e{" "}
+        <span className="bg-gradient-to-r from-primary to-destructive bg-clip-text text-transparent">
+          preços
+        </span>
+      </h2>
+
+      <p className="mx-auto mt-4 max-w-2xl text-muted-foreground leading-relaxed">
+        Escolha o plano que mais combina com você e comece a treinar com
+        inteligência,{" "}
+        <span className="inline-flex items-center rounded-full bg-destructive/10 px-3 py-1 text-sm font-semibold text-destructive ring-1 ring-destructive/20">
+          5 dias grátis para testar a IA
+        </span>
+      </p>
+    </div>
+
+    {/* Cards */}
+    <div className="grid gap-8 sm:grid-cols-2">
+      {plans.map((plan) => (
+        <div
+          key={plan.name}
+          className={`group relative flex flex-col rounded-3xl border p-8 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl ${
+            plan.highlighted
+              ? "border-primary bg-primary/5 shadow-lg shadow-primary/20 scale-[1.02]"
+              : "border-border/50 bg-background/60"
+          }`}
+        >
+          
+          {/* Glow no hover */}
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-primary/10 to-destructive/10 opacity-0 blur-xl transition duration-300 group-hover:opacity-100" />
+
+          {/* Badge */}
+          {plan.highlighted && (
+            <Badge className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary to-destructive text-white shadow">
+              Mais popular
+            </Badge>
+          )}
+
+          {/* Conteúdo */}
+          <div className="relative z-10">
+            <h3 className="text-xl font-semibold text-foreground">
+              {plan.name}
+            </h3>
+
+            <p className="mt-1 text-sm text-muted-foreground">
+              {plan.description}
+            </p>
+
+            {/* Preço */}
+            <div className="mt-6 flex items-baseline gap-1">
+              <span className="text-sm text-muted-foreground">R$</span>
+              <span className="text-4xl font-bold text-foreground">
+                {plan.price}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                {plan.period}
+              </span>
             </div>
-          ))}
+
+            {plan.pricePerMonth && (
+              <p className="mt-1 text-xs text-muted-foreground">
+                equivalente a R$ {plan.pricePerMonth}/mês
+              </p>
+            )}
+
+            {/* Features */}
+            <ul className="mt-6 flex flex-col gap-3">
+              {plan.features.map((feature) => (
+                <li key={feature} className="flex items-center gap-2 text-sm">
+                  <Check size={16} className="shrink-0 text-primary" />
+                  <span className="text-foreground">{feature}</span>
+                </li>
+              ))}
+            </ul>
+
+            {/* CTA */}
+            <div className="mt-8">
+              <Button
+                className={`w-full ${
+                  plan.highlighted
+                    ? "bg-gradient-to-r from-primary to-destructive text-white shadow-lg hover:opacity-90"
+                    : ""
+                }`}
+                variant={plan.highlighted ? "default" : "outline"}
+                disabled={loadingPlan !== null}
+                onClick={() => handleSubscribe(plan.planType)}
+              >
+                {loadingPlan === plan.planType ? (
+                  <>
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                    Redirecionando...
+                  </>
+                ) : plan.highlighted ? (
+                  "Começar agora"
+                ) : (
+                  "Assinar agora"
+                )}
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
+      ))}
+    </div>
+  </div>
+</section>
   );
 }

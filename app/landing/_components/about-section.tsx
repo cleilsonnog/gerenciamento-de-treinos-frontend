@@ -29,31 +29,54 @@ const features = [
 
 export function AboutSection() {
   return (
-    <section id="sobre" className="px-5 py-20">
+    <section id="sobre" className="relative px-5 py-24 overflow-hidden">
+      
+      {/* 🔥 Glow de fundo */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/10 via-transparent to-transparent" />
+      <div className="absolute top-0 left-1/2 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-primary/20 blur-3xl opacity-40" />
+
       <div className="mx-auto max-w-5xl">
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
-            Tudo que você precisa para treinar melhor
+        
+        {/* Header */}
+        <div className="mb-16 text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Tudo que você precisa para{" "}
+            <span className="bg-gradient-to-r from-primary to-destructive bg-clip-text text-transparent">
+              treinar melhor
+            </span>
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground leading-relaxed">
             O Treino.IA combina tecnologia de ponta com ciência do exercício para
             oferecer a melhor experiência de treino.
           </p>
         </div>
+
+        {/* Cards */}
         <div className="grid gap-6 sm:grid-cols-2">
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="flex gap-4 rounded-xl border border-border bg-card p-6"
+              className="group relative flex gap-4 rounded-2xl border border-border/50 bg-background/60 backdrop-blur-xl p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                <feature.icon size={24} className="text-primary" />
+              
+              {/* Glow no hover */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/10 to-destructive/10 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+
+              {/* Ícone */}
+              <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
+                <feature.icon
+                  size={24}
+                  className="text-primary transition-transform duration-300 group-hover:scale-110"
+                />
               </div>
-              <div className="flex flex-col gap-1">
+
+              {/* Texto */}
+              <div className="relative z-10 flex flex-col gap-1">
                 <h3 className="font-semibold text-foreground">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-muted-foreground leading-relaxed">
                   {feature.description}
                 </p>
               </div>
