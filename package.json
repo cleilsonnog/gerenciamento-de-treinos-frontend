@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint",
-    "deploy": "npm install && npm run build"
+    "start": "npm install && next build && next start",
+    "lint": "eslint"
   },
   "dependencies": {
     "@ai-sdk/react": "3.0.51",
