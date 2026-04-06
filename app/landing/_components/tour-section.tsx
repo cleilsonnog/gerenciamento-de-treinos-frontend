@@ -60,8 +60,8 @@ export function TourSection() {
         <motion.div
           className="grid gap-10 sm:grid-cols-3"
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
+          animate="visible"
+          viewport={{ once: true, margin: "100px" }}
           variants={{
             hidden: {},
             visible: {
