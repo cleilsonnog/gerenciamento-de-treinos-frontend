@@ -252,6 +252,16 @@ export type GetWorkoutDay200ExercisesItem = {
   sets: number;
   reps: number;
   restTimeInSeconds: number;
+  /** @nullable */
+  weightInKg: number | null;
+};
+
+export type GetWorkoutDay200SessionsItemSessionExercisesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  exerciseId: string;
+  isCompleted: boolean;
 };
 
 export type GetWorkoutDay200SessionsItem = {
@@ -269,6 +279,7 @@ export type GetWorkoutDay200SessionsItem = {
    * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
    */
   completedAt?: string | null;
+  sessionExercises: GetWorkoutDay200SessionsItemSessionExercisesItem[];
 };
 
 export type GetWorkoutDay200 = {
@@ -1083,6 +1094,191 @@ export const upsertUserTrainData = async (
     headers: { "Content-Type": "application/json", ...options?.headers },
     body: JSON.stringify(upsertUserTrainDataBody),
   });
+};
+
+/**
+ * @summary Update a session exercise (check/uncheck and weight)
+ */
+export type UpdateSessionExerciseBody = {
+  isCompleted: boolean;
+};
+
+export type UpdateSessionExercise200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  exerciseId: string;
+  isCompleted: boolean;
+};
+
+export type UpdateExerciseWeightBody = {
+  /** @minimum 0 @nullable */
+  weightInKg: number | null;
+};
+
+export type UpdateExerciseWeight200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  /** @nullable */
+  weightInKg: number | null;
+};
+
+export type UpdateExerciseWeight401 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateExerciseWeight404 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateExerciseWeight500 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateSessionExercise401 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateSessionExercise404 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateSessionExercise500 = {
+  error: string;
+  code: string;
+};
+
+export type updateSessionExerciseResponse200 = {
+  data: UpdateSessionExercise200;
+  status: 200;
+};
+
+export type updateSessionExerciseResponse401 = {
+  data: UpdateSessionExercise401;
+  status: 401;
+};
+
+export type updateSessionExerciseResponse404 = {
+  data: UpdateSessionExercise404;
+  status: 404;
+};
+
+export type updateSessionExerciseResponse500 = {
+  data: UpdateSessionExercise500;
+  status: 500;
+};
+
+export type updateSessionExerciseResponseSuccess =
+  updateSessionExerciseResponse200 & {
+    headers: Headers;
+  };
+export type updateSessionExerciseResponseError = (
+  | updateSessionExerciseResponse401
+  | updateSessionExerciseResponse404
+  | updateSessionExerciseResponse500
+) & {
+  headers: Headers;
+};
+
+export type updateSessionExerciseResponse =
+  | updateSessionExerciseResponseSuccess
+  | updateSessionExerciseResponseError;
+
+export const getUpdateSessionExerciseUrl = (
+  workoutPlanId: string,
+  sessionId: string,
+  sessionExerciseId: string,
+) => {
+  return `/${workoutPlanId}/sessions/${sessionId}/exercises/${sessionExerciseId}`;
+};
+
+export const updateSessionExercise = async (
+  workoutPlanId: string,
+  sessionId: string,
+  sessionExerciseId: string,
+  updateSessionExerciseBody: UpdateSessionExerciseBody,
+  options?: RequestInit,
+): Promise<updateSessionExerciseResponse> => {
+  return customFetch<updateSessionExerciseResponse>(
+    getUpdateSessionExerciseUrl(workoutPlanId, sessionId, sessionExerciseId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateSessionExerciseBody),
+    },
+  );
+};
+
+/**
+ * @summary Update exercise weight
+ */
+export type updateExerciseWeightResponse200 = {
+  data: UpdateExerciseWeight200;
+  status: 200;
+};
+
+export type updateExerciseWeightResponse401 = {
+  data: UpdateExerciseWeight401;
+  status: 401;
+};
+
+export type updateExerciseWeightResponse404 = {
+  data: UpdateExerciseWeight404;
+  status: 404;
+};
+
+export type updateExerciseWeightResponse500 = {
+  data: UpdateExerciseWeight500;
+  status: 500;
+};
+
+export type updateExerciseWeightResponseSuccess =
+  updateExerciseWeightResponse200 & {
+    headers: Headers;
+  };
+export type updateExerciseWeightResponseError = (
+  | updateExerciseWeightResponse401
+  | updateExerciseWeightResponse404
+  | updateExerciseWeightResponse500
+) & {
+  headers: Headers;
+};
+
+export type updateExerciseWeightResponse =
+  | updateExerciseWeightResponseSuccess
+  | updateExerciseWeightResponseError;
+
+export const getUpdateExerciseWeightUrl = (
+  workoutPlanId: string,
+  workoutDayId: string,
+  exerciseId: string,
+) => {
+  return `/${workoutPlanId}/days/${workoutDayId}/exercises/${exerciseId}/weight`;
+};
+
+export const updateExerciseWeight = async (
+  workoutPlanId: string,
+  workoutDayId: string,
+  exerciseId: string,
+  updateExerciseWeightBody: UpdateExerciseWeightBody,
+  options?: RequestInit,
+): Promise<updateExerciseWeightResponse> => {
+  return customFetch<updateExerciseWeightResponse>(
+    getUpdateExerciseWeightUrl(workoutPlanId, workoutDayId, exerciseId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateExerciseWeightBody),
+    },
+  );
 };
 
 /**

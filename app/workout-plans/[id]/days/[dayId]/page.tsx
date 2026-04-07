@@ -57,7 +57,7 @@ export default async function WorkoutDayPage({ params }: PageProps) {
   if (hasNoTrainData || hasNoActivePlan) redirect("/onboarding");
 
   const { id, dayId } = await params;
-  const response = await getWorkoutDay(id, dayId);
+  const response = await getWorkoutDay(id, dayId, { cache: "no-store" });
 
   if (response.status !== 200) {
     throw new Error("Failed to fetch workout day");
@@ -73,6 +73,11 @@ export default async function WorkoutDayPage({ params }: PageProps) {
   );
   const completedSession = workoutDay.sessions.find((s) => s.completedAt);
   const hasCompletedSession = !!completedSession;
+
+  const activeSession = inProgressSession ?? completedSession;
+  const sessionExercisesMap = new Map(
+    activeSession?.sessionExercises?.map((se) => [se.exerciseId, se]) ?? []
+  );
 
   const completedDuration =
     completedSession?.startedAt && completedSession?.completedAt
@@ -156,15 +161,32 @@ export default async function WorkoutDayPage({ params }: PageProps) {
       </div>
 
       <div className="mx-5 mt-6 flex flex-col divide-y divide-border">
-        {workoutDay.exercises.map((exercise) => (
-          <ExerciseCard
-            key={exercise.id}
-            name={exercise.name}
-            sets={exercise.sets}
-            reps={exercise.reps}
-            restTimeInSeconds={exercise.restTimeInSeconds}
-          />
-        ))}
+        {workoutDay.exercises.map((exercise) => {
+          const sessionExercise = sessionExercisesMap.get(exercise.id);
+          return (
+            <ExerciseCard
+              key={exercise.id}
+              exerciseId={exercise.id}
+              name={exercise.name}
+              sets={exercise.sets}
+              reps={exercise.reps}
+              restTimeInSeconds={exercise.restTimeInSeconds}
+              weightInKg={exercise.weightInKg}
+              workoutPlanId={id}
+              workoutDayId={dayId}
+              sessionId={activeSession?.id}
+              sessionExercise={
+                sessionExercise
+                  ? {
+                      id: sessionExercise.id,
+                      isCompleted: sessionExercise.isCompleted,
+                    }
+                  : undefined
+              }
+              isSessionActive={!!inProgressSession}
+            />
+          );
+        })}
       </div>
 
       {inProgressSession && (
