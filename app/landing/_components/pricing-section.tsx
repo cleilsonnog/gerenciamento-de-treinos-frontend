@@ -7,23 +7,27 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/app/_lib/auth-client";
 
-type PlanType = "MONTHLY" | "QUARTERLY";
+type PlanType = "MONTHLY" | "YEARLY";
 
 const plans: Array<{
   name: string;
   price: string;
+  originalPrice?: string;
   period: string;
   description: string;
   pricePerMonth?: string;
+  promoLabel?: string;
   features: string[];
   highlighted: boolean;
   planType: PlanType;
 }> = [
   {
     name: "Mensal",
-    price: "14,90",
+    price: "9,90",
+    originalPrice: "14,90",
     period: "/mês",
     description: "Ideal para quem quer experimentar",
+    promoLabel: "R$ 9,90 por 6 meses",
     features: [
       "Plano de treino personalizado por IA",
       "Acompanhamento de progresso",
@@ -34,19 +38,18 @@ const plans: Array<{
     planType: "MONTHLY",
   },
   {
-    name: "Trimestral",
-    price: "39,90",
-    period: "/trimestre",
+    name: "Anual",
+    price: "99,00",
+    period: "/ano",
     description: "Melhor custo-benefício",
-    pricePerMonth: "13,30",
+    pricePerMonth: "8,25",
     features: [
       "Tudo do plano mensal",
-      "Economia de 10%",
+      "Economia de 45%",
       "Suporte prioritário",
-      "Relatórios avançados",
     ],
     highlighted: true,
-    planType: "QUARTERLY",
+    planType: "YEARLY",
   },
 ];
 
@@ -109,7 +112,7 @@ export function PricingSection() {
         Escolha o plano que mais combina com você e comece a treinar com
         inteligência,{" "}
         <span className="inline-flex items-center rounded-full bg-destructive/10 px-3 py-1 text-sm font-semibold text-destructive ring-1 ring-destructive/20">
-          5 dias grátis para testar a IA
+          14 dias grátis para testar a IA
         </span>
       </p>
     </div>
@@ -155,7 +158,18 @@ export function PricingSection() {
               <span className="text-sm text-muted-foreground">
                 {plan.period}
               </span>
+              {plan.originalPrice && (
+                <span className="ml-1 text-sm text-muted-foreground line-through">
+                  R$ {plan.originalPrice}
+                </span>
+              )}
             </div>
+
+            {plan.promoLabel && (
+              <p className="mt-1 text-xs font-medium text-destructive">
+                {plan.promoLabel}
+              </p>
+            )}
 
             {plan.pricePerMonth && (
               <p className="mt-1 text-xs text-muted-foreground">
