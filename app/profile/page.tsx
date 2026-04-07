@@ -88,7 +88,7 @@ export default async function ProfilePage() {
   const heightInCm = trainData
     ? String(trainData.heightInCentimeters)
     : "--";
-  const bodyFat = trainData ? `${trainData.bodyFatPercentage}%` : "--";
+  const bodyFat = trainData?.bodyFatPercentage != null ? `${trainData.bodyFatPercentage}%` : "--";
   const age = trainData ? String(trainData.age) : "--";
 
   return (

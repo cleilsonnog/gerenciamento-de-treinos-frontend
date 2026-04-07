@@ -366,6 +366,64 @@ export type UpdateWorkoutSession500 = {
   code: string;
 };
 
+export type UpdateSessionExerciseBody = {
+  isCompleted: boolean;
+};
+
+export type UpdateSessionExercise200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  exerciseId: string;
+  isCompleted: boolean;
+};
+
+export type UpdateSessionExercise401 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateSessionExercise404 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateSessionExercise500 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateExerciseWeightBody = {
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  weightInKg: number | null;
+};
+
+export type UpdateExerciseWeight200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  /** @nullable */
+  weightInKg: number | null;
+};
+
+export type UpdateExerciseWeight401 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateExerciseWeight404 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateExerciseWeight500 = {
+  error: string;
+  code: string;
+};
+
 export type GetHomeParams = {
   timezone?: string;
 };
@@ -470,7 +528,8 @@ export type GetUserTrainData200 = {
   weightInGrams: number;
   heightInCentimeters: number;
   age: number;
-  bodyFatPercentage: number;
+  /** @nullable */
+  bodyFatPercentage: number | null;
 } | null;
 
 export type GetUserTrainData401 = {
@@ -493,8 +552,9 @@ export type UpsertUserTrainDataBody = {
   /**
    * @minimum 0
    * @maximum 100
+   * @nullable
    */
-  bodyFatPercentage: number;
+  bodyFatPercentage?: number | null;
 };
 
 export type UpsertUserTrainData200 = {
@@ -502,11 +562,8 @@ export type UpsertUserTrainData200 = {
   weightInGrams: number;
   heightInCentimeters: number;
   age: number;
-  /**
-   * @minimum 0
-   * @maximum 100
-   */
-  bodyFatPercentage: number;
+  /** @nullable */
+  bodyFatPercentage: number | null;
 };
 
 export type UpsertUserTrainData401 = {
@@ -515,6 +572,156 @@ export type UpsertUserTrainData401 = {
 };
 
 export type UpsertUserTrainData500 = {
+  error: string;
+  code: string;
+};
+
+export type PostCreateCheckoutSessionBodyPlan =
+  (typeof PostCreateCheckoutSessionBodyPlan)[keyof typeof PostCreateCheckoutSessionBodyPlan];
+
+export const PostCreateCheckoutSessionBodyPlan = {
+  MONTHLY: "MONTHLY",
+  YEARLY: "YEARLY",
+} as const;
+
+export type PostCreateCheckoutSessionBody = {
+  plan: PostCreateCheckoutSessionBodyPlan;
+};
+
+export type PostCreateCheckoutSession200 = {
+  checkoutUrl: string;
+};
+
+export type PostCreateCheckoutSession401 = {
+  error: string;
+  code: string;
+};
+
+export type PostCreateCheckoutSession500 = {
+  error: string;
+  code: string;
+};
+
+export type GetSubscription200Plan =
+  (typeof GetSubscription200Plan)[keyof typeof GetSubscription200Plan];
+
+export const GetSubscription200Plan = {
+  FREE: "FREE",
+  MONTHLY: "MONTHLY",
+  QUARTERLY: "QUARTERLY",
+  YEARLY: "YEARLY",
+} as const;
+
+/**
+ * @nullable
+ */
+export type GetSubscription200SubscriptionStatus =
+  | (typeof GetSubscription200SubscriptionStatus)[keyof typeof GetSubscription200SubscriptionStatus]
+  | null;
+
+export const GetSubscription200SubscriptionStatus = {
+  ACTIVE: "ACTIVE",
+  CANCELED: "CANCELED",
+  INCOMPLETE: "INCOMPLETE",
+  PAST_DUE: "PAST_DUE",
+} as const;
+
+export type GetSubscription200 = {
+  plan: GetSubscription200Plan;
+  /** @nullable */
+  subscriptionStatus: GetSubscription200SubscriptionStatus;
+  /** @nullable */
+  stripeCustomerId: string | null;
+  /** @nullable */
+  subscriptionId: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  trialEndsAt: string;
+  isTrialActive: boolean;
+  hasAccess: boolean;
+};
+
+export type GetSubscription401 = {
+  error: string;
+  code: string;
+};
+
+export type GetSubscription404 = {
+  error: string;
+  code: string;
+};
+
+export type GetSubscription500 = {
+  error: string;
+  code: string;
+};
+
+export type PostCancelSubscription200 = {
+  message: string;
+};
+
+export type PostCancelSubscription400 = {
+  error: string;
+  code: string;
+};
+
+export type PostCancelSubscription401 = {
+  error: string;
+  code: string;
+};
+
+export type PostCancelSubscription404 = {
+  error: string;
+  code: string;
+};
+
+export type PostCancelSubscription500 = {
+  error: string;
+  code: string;
+};
+
+export type PostChangePlanBodyPlan =
+  (typeof PostChangePlanBodyPlan)[keyof typeof PostChangePlanBodyPlan];
+
+export const PostChangePlanBodyPlan = {
+  MONTHLY: "MONTHLY",
+  YEARLY: "YEARLY",
+} as const;
+
+export type PostChangePlanBody = {
+  plan: PostChangePlanBodyPlan;
+};
+
+export type PostChangePlan200Plan =
+  (typeof PostChangePlan200Plan)[keyof typeof PostChangePlan200Plan];
+
+export const PostChangePlan200Plan = {
+  FREE: "FREE",
+  MONTHLY: "MONTHLY",
+  QUARTERLY: "QUARTERLY",
+  YEARLY: "YEARLY",
+} as const;
+
+export type PostChangePlan200 = {
+  message: string;
+  plan: PostChangePlan200Plan;
+};
+
+export type PostChangePlan400 = {
+  error: string;
+  code: string;
+};
+
+export type PostChangePlan401 = {
+  error: string;
+  code: string;
+};
+
+export type PostChangePlan404 = {
+  error: string;
+  code: string;
+};
+
+export type PostChangePlan500 = {
   error: string;
   code: string;
 };
@@ -884,6 +1091,136 @@ export const updateWorkoutSession = async (
 };
 
 /**
+ * @summary Update a session exercise (check/uncheck)
+ */
+export type updateSessionExerciseResponse200 = {
+  data: UpdateSessionExercise200;
+  status: 200;
+};
+
+export type updateSessionExerciseResponse401 = {
+  data: UpdateSessionExercise401;
+  status: 401;
+};
+
+export type updateSessionExerciseResponse404 = {
+  data: UpdateSessionExercise404;
+  status: 404;
+};
+
+export type updateSessionExerciseResponse500 = {
+  data: UpdateSessionExercise500;
+  status: 500;
+};
+
+export type updateSessionExerciseResponseSuccess =
+  updateSessionExerciseResponse200 & {
+    headers: Headers;
+  };
+export type updateSessionExerciseResponseError = (
+  | updateSessionExerciseResponse401
+  | updateSessionExerciseResponse404
+  | updateSessionExerciseResponse500
+) & {
+  headers: Headers;
+};
+
+export type updateSessionExerciseResponse =
+  | updateSessionExerciseResponseSuccess
+  | updateSessionExerciseResponseError;
+
+export const getUpdateSessionExerciseUrl = (
+  workoutPlanId: string,
+  sessionId: string,
+  sessionExerciseId: string,
+) => {
+  return `/${workoutPlanId}/sessions/${sessionId}/exercises/${sessionExerciseId}`;
+};
+
+export const updateSessionExercise = async (
+  workoutPlanId: string,
+  sessionId: string,
+  sessionExerciseId: string,
+  updateSessionExerciseBody: UpdateSessionExerciseBody,
+  options?: RequestInit,
+): Promise<updateSessionExerciseResponse> => {
+  return customFetch<updateSessionExerciseResponse>(
+    getUpdateSessionExerciseUrl(workoutPlanId, sessionId, sessionExerciseId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateSessionExerciseBody),
+    },
+  );
+};
+
+/**
+ * @summary Update exercise weight
+ */
+export type updateExerciseWeightResponse200 = {
+  data: UpdateExerciseWeight200;
+  status: 200;
+};
+
+export type updateExerciseWeightResponse401 = {
+  data: UpdateExerciseWeight401;
+  status: 401;
+};
+
+export type updateExerciseWeightResponse404 = {
+  data: UpdateExerciseWeight404;
+  status: 404;
+};
+
+export type updateExerciseWeightResponse500 = {
+  data: UpdateExerciseWeight500;
+  status: 500;
+};
+
+export type updateExerciseWeightResponseSuccess =
+  updateExerciseWeightResponse200 & {
+    headers: Headers;
+  };
+export type updateExerciseWeightResponseError = (
+  | updateExerciseWeightResponse401
+  | updateExerciseWeightResponse404
+  | updateExerciseWeightResponse500
+) & {
+  headers: Headers;
+};
+
+export type updateExerciseWeightResponse =
+  | updateExerciseWeightResponseSuccess
+  | updateExerciseWeightResponseError;
+
+export const getUpdateExerciseWeightUrl = (
+  workoutPlanId: string,
+  workoutDayId: string,
+  exerciseId: string,
+) => {
+  return `/${workoutPlanId}/days/${workoutDayId}/exercises/${exerciseId}/weight`;
+};
+
+export const updateExerciseWeight = async (
+  workoutPlanId: string,
+  workoutDayId: string,
+  exerciseId: string,
+  updateExerciseWeightBody: UpdateExerciseWeightBody,
+  options?: RequestInit,
+): Promise<updateExerciseWeightResponse> => {
+  return customFetch<updateExerciseWeightResponse>(
+    getUpdateExerciseWeightUrl(workoutPlanId, workoutDayId, exerciseId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateExerciseWeightBody),
+    },
+  );
+};
+
+/**
  * @summary Get home page data for a given date
  */
 export type getHomeResponse200 = {
@@ -1097,191 +1434,6 @@ export const upsertUserTrainData = async (
 };
 
 /**
- * @summary Update a session exercise (check/uncheck and weight)
- */
-export type UpdateSessionExerciseBody = {
-  isCompleted: boolean;
-};
-
-export type UpdateSessionExercise200 = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  exerciseId: string;
-  isCompleted: boolean;
-};
-
-export type UpdateExerciseWeightBody = {
-  /** @minimum 0 @nullable */
-  weightInKg: number | null;
-};
-
-export type UpdateExerciseWeight200 = {
-  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
-  id: string;
-  name: string;
-  /** @nullable */
-  weightInKg: number | null;
-};
-
-export type UpdateExerciseWeight401 = {
-  error: string;
-  code: string;
-};
-
-export type UpdateExerciseWeight404 = {
-  error: string;
-  code: string;
-};
-
-export type UpdateExerciseWeight500 = {
-  error: string;
-  code: string;
-};
-
-export type UpdateSessionExercise401 = {
-  error: string;
-  code: string;
-};
-
-export type UpdateSessionExercise404 = {
-  error: string;
-  code: string;
-};
-
-export type UpdateSessionExercise500 = {
-  error: string;
-  code: string;
-};
-
-export type updateSessionExerciseResponse200 = {
-  data: UpdateSessionExercise200;
-  status: 200;
-};
-
-export type updateSessionExerciseResponse401 = {
-  data: UpdateSessionExercise401;
-  status: 401;
-};
-
-export type updateSessionExerciseResponse404 = {
-  data: UpdateSessionExercise404;
-  status: 404;
-};
-
-export type updateSessionExerciseResponse500 = {
-  data: UpdateSessionExercise500;
-  status: 500;
-};
-
-export type updateSessionExerciseResponseSuccess =
-  updateSessionExerciseResponse200 & {
-    headers: Headers;
-  };
-export type updateSessionExerciseResponseError = (
-  | updateSessionExerciseResponse401
-  | updateSessionExerciseResponse404
-  | updateSessionExerciseResponse500
-) & {
-  headers: Headers;
-};
-
-export type updateSessionExerciseResponse =
-  | updateSessionExerciseResponseSuccess
-  | updateSessionExerciseResponseError;
-
-export const getUpdateSessionExerciseUrl = (
-  workoutPlanId: string,
-  sessionId: string,
-  sessionExerciseId: string,
-) => {
-  return `/${workoutPlanId}/sessions/${sessionId}/exercises/${sessionExerciseId}`;
-};
-
-export const updateSessionExercise = async (
-  workoutPlanId: string,
-  sessionId: string,
-  sessionExerciseId: string,
-  updateSessionExerciseBody: UpdateSessionExerciseBody,
-  options?: RequestInit,
-): Promise<updateSessionExerciseResponse> => {
-  return customFetch<updateSessionExerciseResponse>(
-    getUpdateSessionExerciseUrl(workoutPlanId, sessionId, sessionExerciseId),
-    {
-      ...options,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(updateSessionExerciseBody),
-    },
-  );
-};
-
-/**
- * @summary Update exercise weight
- */
-export type updateExerciseWeightResponse200 = {
-  data: UpdateExerciseWeight200;
-  status: 200;
-};
-
-export type updateExerciseWeightResponse401 = {
-  data: UpdateExerciseWeight401;
-  status: 401;
-};
-
-export type updateExerciseWeightResponse404 = {
-  data: UpdateExerciseWeight404;
-  status: 404;
-};
-
-export type updateExerciseWeightResponse500 = {
-  data: UpdateExerciseWeight500;
-  status: 500;
-};
-
-export type updateExerciseWeightResponseSuccess =
-  updateExerciseWeightResponse200 & {
-    headers: Headers;
-  };
-export type updateExerciseWeightResponseError = (
-  | updateExerciseWeightResponse401
-  | updateExerciseWeightResponse404
-  | updateExerciseWeightResponse500
-) & {
-  headers: Headers;
-};
-
-export type updateExerciseWeightResponse =
-  | updateExerciseWeightResponseSuccess
-  | updateExerciseWeightResponseError;
-
-export const getUpdateExerciseWeightUrl = (
-  workoutPlanId: string,
-  workoutDayId: string,
-  exerciseId: string,
-) => {
-  return `/${workoutPlanId}/days/${workoutDayId}/exercises/${exerciseId}/weight`;
-};
-
-export const updateExerciseWeight = async (
-  workoutPlanId: string,
-  workoutDayId: string,
-  exerciseId: string,
-  updateExerciseWeightBody: UpdateExerciseWeightBody,
-  options?: RequestInit,
-): Promise<updateExerciseWeightResponse> => {
-  return customFetch<updateExerciseWeightResponse>(
-    getUpdateExerciseWeightUrl(workoutPlanId, workoutDayId, exerciseId),
-    {
-      ...options,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json", ...options?.headers },
-      body: JSON.stringify(updateExerciseWeightBody),
-    },
-  );
-};
-
-/**
  * @summary Chat with AI personal trainer
  */
 export type postAiResponse200 = {
@@ -1304,5 +1456,229 @@ export const postAi = async (
   return customFetch<postAiResponse>(getPostAiUrl(), {
     ...options,
     method: "POST",
+  });
+};
+
+/**
+ * @summary Create a Stripe checkout session for subscription
+ */
+export type postCreateCheckoutSessionResponse200 = {
+  data: PostCreateCheckoutSession200;
+  status: 200;
+};
+
+export type postCreateCheckoutSessionResponse401 = {
+  data: PostCreateCheckoutSession401;
+  status: 401;
+};
+
+export type postCreateCheckoutSessionResponse500 = {
+  data: PostCreateCheckoutSession500;
+  status: 500;
+};
+
+export type postCreateCheckoutSessionResponseSuccess =
+  postCreateCheckoutSessionResponse200 & {
+    headers: Headers;
+  };
+export type postCreateCheckoutSessionResponseError = (
+  | postCreateCheckoutSessionResponse401
+  | postCreateCheckoutSessionResponse500
+) & {
+  headers: Headers;
+};
+
+export type postCreateCheckoutSessionResponse =
+  | postCreateCheckoutSessionResponseSuccess
+  | postCreateCheckoutSessionResponseError;
+
+export const getPostCreateCheckoutSessionUrl = () => {
+  return `/create-checkout-session`;
+};
+
+export const postCreateCheckoutSession = async (
+  postCreateCheckoutSessionBody: PostCreateCheckoutSessionBody,
+  options?: RequestInit,
+): Promise<postCreateCheckoutSessionResponse> => {
+  return customFetch<postCreateCheckoutSessionResponse>(
+    getPostCreateCheckoutSessionUrl(),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(postCreateCheckoutSessionBody),
+    },
+  );
+};
+
+/**
+ * @summary Get current user subscription info
+ */
+export type getSubscriptionResponse200 = {
+  data: GetSubscription200;
+  status: 200;
+};
+
+export type getSubscriptionResponse401 = {
+  data: GetSubscription401;
+  status: 401;
+};
+
+export type getSubscriptionResponse404 = {
+  data: GetSubscription404;
+  status: 404;
+};
+
+export type getSubscriptionResponse500 = {
+  data: GetSubscription500;
+  status: 500;
+};
+
+export type getSubscriptionResponseSuccess = getSubscriptionResponse200 & {
+  headers: Headers;
+};
+export type getSubscriptionResponseError = (
+  | getSubscriptionResponse401
+  | getSubscriptionResponse404
+  | getSubscriptionResponse500
+) & {
+  headers: Headers;
+};
+
+export type getSubscriptionResponse =
+  | getSubscriptionResponseSuccess
+  | getSubscriptionResponseError;
+
+export const getGetSubscriptionUrl = () => {
+  return `/subscription`;
+};
+
+export const getSubscription = async (
+  options?: RequestInit,
+): Promise<getSubscriptionResponse> => {
+  return customFetch<getSubscriptionResponse>(getGetSubscriptionUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+/**
+ * @summary Cancel current subscription
+ */
+export type postCancelSubscriptionResponse200 = {
+  data: PostCancelSubscription200;
+  status: 200;
+};
+
+export type postCancelSubscriptionResponse400 = {
+  data: PostCancelSubscription400;
+  status: 400;
+};
+
+export type postCancelSubscriptionResponse401 = {
+  data: PostCancelSubscription401;
+  status: 401;
+};
+
+export type postCancelSubscriptionResponse404 = {
+  data: PostCancelSubscription404;
+  status: 404;
+};
+
+export type postCancelSubscriptionResponse500 = {
+  data: PostCancelSubscription500;
+  status: 500;
+};
+
+export type postCancelSubscriptionResponseSuccess =
+  postCancelSubscriptionResponse200 & {
+    headers: Headers;
+  };
+export type postCancelSubscriptionResponseError = (
+  | postCancelSubscriptionResponse400
+  | postCancelSubscriptionResponse401
+  | postCancelSubscriptionResponse404
+  | postCancelSubscriptionResponse500
+) & {
+  headers: Headers;
+};
+
+export type postCancelSubscriptionResponse =
+  | postCancelSubscriptionResponseSuccess
+  | postCancelSubscriptionResponseError;
+
+export const getPostCancelSubscriptionUrl = () => {
+  return `/cancel-subscription`;
+};
+
+export const postCancelSubscription = async (
+  options?: RequestInit,
+): Promise<postCancelSubscriptionResponse> => {
+  return customFetch<postCancelSubscriptionResponse>(
+    getPostCancelSubscriptionUrl(),
+    {
+      ...options,
+      method: "POST",
+    },
+  );
+};
+
+/**
+ * @summary Change subscription plan
+ */
+export type postChangePlanResponse200 = {
+  data: PostChangePlan200;
+  status: 200;
+};
+
+export type postChangePlanResponse400 = {
+  data: PostChangePlan400;
+  status: 400;
+};
+
+export type postChangePlanResponse401 = {
+  data: PostChangePlan401;
+  status: 401;
+};
+
+export type postChangePlanResponse404 = {
+  data: PostChangePlan404;
+  status: 404;
+};
+
+export type postChangePlanResponse500 = {
+  data: PostChangePlan500;
+  status: 500;
+};
+
+export type postChangePlanResponseSuccess = postChangePlanResponse200 & {
+  headers: Headers;
+};
+export type postChangePlanResponseError = (
+  | postChangePlanResponse400
+  | postChangePlanResponse401
+  | postChangePlanResponse404
+  | postChangePlanResponse500
+) & {
+  headers: Headers;
+};
+
+export type postChangePlanResponse =
+  | postChangePlanResponseSuccess
+  | postChangePlanResponseError;
+
+export const getPostChangePlanUrl = () => {
+  return `/change-plan`;
+};
+
+export const postChangePlan = async (
+  postChangePlanBody: PostChangePlanBody,
+  options?: RequestInit,
+): Promise<postChangePlanResponse> => {
+  return customFetch<postChangePlanResponse>(getPostChangePlanUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(postChangePlanBody),
   });
 };
