@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
-import { Weight, Ruler, BicepsFlexed, User, Settings } from "lucide-react";
+import Link from "next/link";
+import { Weight, Ruler, BicepsFlexed, User, Settings, ShieldCheck } from "lucide-react";
 import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
 import { getUserTrainData, getHome } from "@/app/_lib/api/fetch-generated";
@@ -57,7 +58,7 @@ export default async function ProfilePage() {
 
   if (hasNoTrainData || hasNoActivePlan) redirect("/onboarding");
 
-  const user = session.data.user;
+  const user = session.data.user as { name: string; image?: string | null; role?: string };
   const initials = user.name
     ? user.name
         .split(" ")
@@ -132,6 +133,15 @@ export default async function ProfilePage() {
           <StatCard icon={BicepsFlexed} value={bodyFat} unit="Gc" />
           <StatCard icon={User} value={age} unit="Anos" />
         </div>
+
+        {user.role === "admin" && (
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/admin">
+              <ShieldCheck size={18} />
+              Painel Admin
+            </Link>
+          </Button>
+        )}
 
         <LogoutButton />
       </section>

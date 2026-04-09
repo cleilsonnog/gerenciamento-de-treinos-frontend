@@ -6,6 +6,276 @@
  * OpenAPI spec version: 1.0.0
  */
 import { customFetch } from "../../fetch";
+export type GetAdminStats200UsersByPlan = { [key: string]: number };
+
+export type GetAdminStats200 = {
+  totalUsers: number;
+  usersByPlan: GetAdminStats200UsersByPlan;
+  activeSubscriptions: number;
+  newUsersThisMonth: number;
+};
+
+export type GetAdminStats401 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminStats403 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminStats500 = {
+  error: string;
+  code: string;
+};
+
+export type ListAdminUsersParams = {
+  search?: string;
+  plan?: string;
+  status?: string;
+  /**
+   * @minimum 1
+   * @maximum 9007199254740991
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+};
+
+export type ListAdminUsers200UsersItemPlan =
+  (typeof ListAdminUsers200UsersItemPlan)[keyof typeof ListAdminUsers200UsersItemPlan];
+
+export const ListAdminUsers200UsersItemPlan = {
+  FREE: "FREE",
+  MONTHLY: "MONTHLY",
+  QUARTERLY: "QUARTERLY",
+  YEARLY: "YEARLY",
+} as const;
+
+/**
+ * @nullable
+ */
+export type ListAdminUsers200UsersItemSubscriptionStatus =
+  | (typeof ListAdminUsers200UsersItemSubscriptionStatus)[keyof typeof ListAdminUsers200UsersItemSubscriptionStatus]
+  | null;
+
+export const ListAdminUsers200UsersItemSubscriptionStatus = {
+  ACTIVE: "ACTIVE",
+  CANCELED: "CANCELED",
+  INCOMPLETE: "INCOMPLETE",
+  PAST_DUE: "PAST_DUE",
+} as const;
+
+export type ListAdminUsers200UsersItem = {
+  id: string;
+  name: string;
+  email: string;
+  /** @nullable */
+  image: string | null;
+  plan: ListAdminUsers200UsersItemPlan;
+  /** @nullable */
+  subscriptionStatus: ListAdminUsers200UsersItemSubscriptionStatus;
+  role: string;
+  banned: boolean;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+};
+
+export type ListAdminUsers200 = {
+  users: ListAdminUsers200UsersItem[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+};
+
+export type ListAdminUsers401 = {
+  error: string;
+  code: string;
+};
+
+export type ListAdminUsers403 = {
+  error: string;
+  code: string;
+};
+
+export type ListAdminUsers500 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminUserDetail200Plan =
+  (typeof GetAdminUserDetail200Plan)[keyof typeof GetAdminUserDetail200Plan];
+
+export const GetAdminUserDetail200Plan = {
+  FREE: "FREE",
+  MONTHLY: "MONTHLY",
+  QUARTERLY: "QUARTERLY",
+  YEARLY: "YEARLY",
+} as const;
+
+/**
+ * @nullable
+ */
+export type GetAdminUserDetail200SubscriptionStatus =
+  | (typeof GetAdminUserDetail200SubscriptionStatus)[keyof typeof GetAdminUserDetail200SubscriptionStatus]
+  | null;
+
+export const GetAdminUserDetail200SubscriptionStatus = {
+  ACTIVE: "ACTIVE",
+  CANCELED: "CANCELED",
+  INCOMPLETE: "INCOMPLETE",
+  PAST_DUE: "PAST_DUE",
+} as const;
+
+export type GetAdminUserDetail200 = {
+  id: string;
+  name: string;
+  email: string;
+  /** @nullable */
+  image: string | null;
+  plan: GetAdminUserDetail200Plan;
+  /** @nullable */
+  subscriptionStatus: GetAdminUserDetail200SubscriptionStatus;
+  /** @nullable */
+  stripeCustomerId: string | null;
+  role: string;
+  banned: boolean;
+  /** @nullable */
+  banReason: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  banExpires: string | null;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  /** @nullable */
+  weightInGrams: number | null;
+  /** @nullable */
+  heightInCentimeters: number | null;
+  /** @nullable */
+  age: number | null;
+  /** @nullable */
+  bodyFatPercentage: number | null;
+  workoutPlansCount: number;
+  sessionsCount: number;
+};
+
+export type GetAdminUserDetail401 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminUserDetail403 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminUserDetail404 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminUserDetail500 = {
+  error: string;
+  code: string;
+};
+
+export type BanAdminUserBody = {
+  banReason?: string;
+  banExpiresIn?: number;
+};
+
+export type BanAdminUser200 = {
+  message: string;
+};
+
+export type BanAdminUser401 = {
+  error: string;
+  code: string;
+};
+
+export type BanAdminUser403 = {
+  error: string;
+  code: string;
+};
+
+export type BanAdminUser500 = {
+  error: string;
+  code: string;
+};
+
+export type UnbanAdminUser200 = {
+  message: string;
+};
+
+export type UnbanAdminUser401 = {
+  error: string;
+  code: string;
+};
+
+export type UnbanAdminUser403 = {
+  error: string;
+  code: string;
+};
+
+export type UnbanAdminUser500 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminStripeLogsParams = {
+  type?: string;
+  /**
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
+   */
+  startDate?: string;
+  /**
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))$
+   */
+  endDate?: string;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  startingAfter?: string;
+};
+
+export type GetAdminStripeLogs200EventsItemData = { [key: string]: unknown };
+
+export type GetAdminStripeLogs200EventsItem = {
+  id: string;
+  type: string;
+  created: number;
+  data: GetAdminStripeLogs200EventsItemData;
+};
+
+export type GetAdminStripeLogs200 = {
+  events: GetAdminStripeLogs200EventsItem[];
+  hasMore: boolean;
+};
+
+export type GetAdminStripeLogs401 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminStripeLogs403 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminStripeLogs500 = {
+  error: string;
+  code: string;
+};
+
 export type ListWorkoutPlansParams = {
   active?: ListWorkoutPlansActive;
 };
@@ -724,6 +994,358 @@ export type PostChangePlan404 = {
 export type PostChangePlan500 = {
   error: string;
   code: string;
+};
+
+/**
+ * @summary Get admin dashboard statistics
+ */
+export type getAdminStatsResponse200 = {
+  data: GetAdminStats200;
+  status: 200;
+};
+
+export type getAdminStatsResponse401 = {
+  data: GetAdminStats401;
+  status: 401;
+};
+
+export type getAdminStatsResponse403 = {
+  data: GetAdminStats403;
+  status: 403;
+};
+
+export type getAdminStatsResponse500 = {
+  data: GetAdminStats500;
+  status: 500;
+};
+
+export type getAdminStatsResponseSuccess = getAdminStatsResponse200 & {
+  headers: Headers;
+};
+export type getAdminStatsResponseError = (
+  | getAdminStatsResponse401
+  | getAdminStatsResponse403
+  | getAdminStatsResponse500
+) & {
+  headers: Headers;
+};
+
+export type getAdminStatsResponse =
+  | getAdminStatsResponseSuccess
+  | getAdminStatsResponseError;
+
+export const getGetAdminStatsUrl = () => {
+  return `/admin/stats`;
+};
+
+export const getAdminStats = async (
+  options?: RequestInit,
+): Promise<getAdminStatsResponse> => {
+  return customFetch<getAdminStatsResponse>(getGetAdminStatsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+/**
+ * @summary List users with pagination and filters
+ */
+export type listAdminUsersResponse200 = {
+  data: ListAdminUsers200;
+  status: 200;
+};
+
+export type listAdminUsersResponse401 = {
+  data: ListAdminUsers401;
+  status: 401;
+};
+
+export type listAdminUsersResponse403 = {
+  data: ListAdminUsers403;
+  status: 403;
+};
+
+export type listAdminUsersResponse500 = {
+  data: ListAdminUsers500;
+  status: 500;
+};
+
+export type listAdminUsersResponseSuccess = listAdminUsersResponse200 & {
+  headers: Headers;
+};
+export type listAdminUsersResponseError = (
+  | listAdminUsersResponse401
+  | listAdminUsersResponse403
+  | listAdminUsersResponse500
+) & {
+  headers: Headers;
+};
+
+export type listAdminUsersResponse =
+  | listAdminUsersResponseSuccess
+  | listAdminUsersResponseError;
+
+export const getListAdminUsersUrl = (params?: ListAdminUsersParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/admin/users?${stringifiedParams}`
+    : `/admin/users`;
+};
+
+export const listAdminUsers = async (
+  params?: ListAdminUsersParams,
+  options?: RequestInit,
+): Promise<listAdminUsersResponse> => {
+  return customFetch<listAdminUsersResponse>(getListAdminUsersUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+/**
+ * @summary Get detailed user information
+ */
+export type getAdminUserDetailResponse200 = {
+  data: GetAdminUserDetail200;
+  status: 200;
+};
+
+export type getAdminUserDetailResponse401 = {
+  data: GetAdminUserDetail401;
+  status: 401;
+};
+
+export type getAdminUserDetailResponse403 = {
+  data: GetAdminUserDetail403;
+  status: 403;
+};
+
+export type getAdminUserDetailResponse404 = {
+  data: GetAdminUserDetail404;
+  status: 404;
+};
+
+export type getAdminUserDetailResponse500 = {
+  data: GetAdminUserDetail500;
+  status: 500;
+};
+
+export type getAdminUserDetailResponseSuccess =
+  getAdminUserDetailResponse200 & {
+    headers: Headers;
+  };
+export type getAdminUserDetailResponseError = (
+  | getAdminUserDetailResponse401
+  | getAdminUserDetailResponse403
+  | getAdminUserDetailResponse404
+  | getAdminUserDetailResponse500
+) & {
+  headers: Headers;
+};
+
+export type getAdminUserDetailResponse =
+  | getAdminUserDetailResponseSuccess
+  | getAdminUserDetailResponseError;
+
+export const getGetAdminUserDetailUrl = (userId: string) => {
+  return `/admin/users/${userId}`;
+};
+
+export const getAdminUserDetail = async (
+  userId: string,
+  options?: RequestInit,
+): Promise<getAdminUserDetailResponse> => {
+  return customFetch<getAdminUserDetailResponse>(
+    getGetAdminUserDetailUrl(userId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+/**
+ * @summary Ban a user
+ */
+export type banAdminUserResponse200 = {
+  data: BanAdminUser200;
+  status: 200;
+};
+
+export type banAdminUserResponse401 = {
+  data: BanAdminUser401;
+  status: 401;
+};
+
+export type banAdminUserResponse403 = {
+  data: BanAdminUser403;
+  status: 403;
+};
+
+export type banAdminUserResponse500 = {
+  data: BanAdminUser500;
+  status: 500;
+};
+
+export type banAdminUserResponseSuccess = banAdminUserResponse200 & {
+  headers: Headers;
+};
+export type banAdminUserResponseError = (
+  | banAdminUserResponse401
+  | banAdminUserResponse403
+  | banAdminUserResponse500
+) & {
+  headers: Headers;
+};
+
+export type banAdminUserResponse =
+  | banAdminUserResponseSuccess
+  | banAdminUserResponseError;
+
+export const getBanAdminUserUrl = (userId: string) => {
+  return `/admin/users/${userId}/ban`;
+};
+
+export const banAdminUser = async (
+  userId: string,
+  banAdminUserBody: BanAdminUserBody,
+  options?: RequestInit,
+): Promise<banAdminUserResponse> => {
+  return customFetch<banAdminUserResponse>(getBanAdminUserUrl(userId), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(banAdminUserBody),
+  });
+};
+
+/**
+ * @summary Unban a user
+ */
+export type unbanAdminUserResponse200 = {
+  data: UnbanAdminUser200;
+  status: 200;
+};
+
+export type unbanAdminUserResponse401 = {
+  data: UnbanAdminUser401;
+  status: 401;
+};
+
+export type unbanAdminUserResponse403 = {
+  data: UnbanAdminUser403;
+  status: 403;
+};
+
+export type unbanAdminUserResponse500 = {
+  data: UnbanAdminUser500;
+  status: 500;
+};
+
+export type unbanAdminUserResponseSuccess = unbanAdminUserResponse200 & {
+  headers: Headers;
+};
+export type unbanAdminUserResponseError = (
+  | unbanAdminUserResponse401
+  | unbanAdminUserResponse403
+  | unbanAdminUserResponse500
+) & {
+  headers: Headers;
+};
+
+export type unbanAdminUserResponse =
+  | unbanAdminUserResponseSuccess
+  | unbanAdminUserResponseError;
+
+export const getUnbanAdminUserUrl = (userId: string) => {
+  return `/admin/users/${userId}/unban`;
+};
+
+export const unbanAdminUser = async (
+  userId: string,
+  options?: RequestInit,
+): Promise<unbanAdminUserResponse> => {
+  return customFetch<unbanAdminUserResponse>(getUnbanAdminUserUrl(userId), {
+    ...options,
+    method: "POST",
+  });
+};
+
+/**
+ * @summary Get Stripe event logs
+ */
+export type getAdminStripeLogsResponse200 = {
+  data: GetAdminStripeLogs200;
+  status: 200;
+};
+
+export type getAdminStripeLogsResponse401 = {
+  data: GetAdminStripeLogs401;
+  status: 401;
+};
+
+export type getAdminStripeLogsResponse403 = {
+  data: GetAdminStripeLogs403;
+  status: 403;
+};
+
+export type getAdminStripeLogsResponse500 = {
+  data: GetAdminStripeLogs500;
+  status: 500;
+};
+
+export type getAdminStripeLogsResponseSuccess =
+  getAdminStripeLogsResponse200 & {
+    headers: Headers;
+  };
+export type getAdminStripeLogsResponseError = (
+  | getAdminStripeLogsResponse401
+  | getAdminStripeLogsResponse403
+  | getAdminStripeLogsResponse500
+) & {
+  headers: Headers;
+};
+
+export type getAdminStripeLogsResponse =
+  | getAdminStripeLogsResponseSuccess
+  | getAdminStripeLogsResponseError;
+
+export const getGetAdminStripeLogsUrl = (params?: GetAdminStripeLogsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/admin/stripe-logs?${stringifiedParams}`
+    : `/admin/stripe-logs`;
+};
+
+export const getAdminStripeLogs = async (
+  params?: GetAdminStripeLogsParams,
+  options?: RequestInit,
+): Promise<getAdminStripeLogsResponse> => {
+  return customFetch<getAdminStripeLogsResponse>(
+    getGetAdminStripeLogsUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
 };
 
 /**
