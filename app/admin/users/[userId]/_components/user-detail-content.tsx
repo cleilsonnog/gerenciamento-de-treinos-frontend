@@ -2,7 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { ArrowLeft, Ban, ShieldOff } from "lucide-react";
+import { ArrowLeft, Ban, ShieldOff, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -18,6 +18,7 @@ import {
   useUnbanAdminUser,
 } from "@/lib/api/rc-generated";
 import { BanUserDialog } from "../../_components/ban-user-dialog";
+import { UserWorkoutPlans } from "./user-workout-plans";
 
 interface UserDetailContentProps {
   userId: string;
@@ -69,7 +70,7 @@ export function UserDetailContent({ userId }: UserDetailContentProps) {
           </Link>
         </Button>
         <div className="flex items-center gap-3">
-          {user.image && (
+          {user.image ? (
             <Image
               src={user.image}
               alt={user.name}
@@ -77,6 +78,10 @@ export function UserDetailContent({ userId }: UserDetailContentProps) {
               height={40}
               className="rounded-full"
             />
+          ) : (
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+              <User className="h-5 w-5 text-muted-foreground" />
+            </div>
           )}
           <div>
             <h2 className="text-xl font-semibold text-foreground">
@@ -239,6 +244,8 @@ export function UserDetailContent({ userId }: UserDetailContentProps) {
           </Card>
         </>
       )}
+
+      <UserWorkoutPlans userId={userId} />
 
       <BanUserDialog
         userId={showBanDialog ? userId : null}

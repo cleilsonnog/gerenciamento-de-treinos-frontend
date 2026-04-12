@@ -229,6 +229,209 @@ export type UnbanAdminUser500 = {
   code: string;
 };
 
+export type GetAdminUserWorkoutPlans200ItemWorkoutDaysItemWeekDay =
+  (typeof GetAdminUserWorkoutPlans200ItemWorkoutDaysItemWeekDay)[keyof typeof GetAdminUserWorkoutPlans200ItemWorkoutDaysItemWeekDay];
+
+export const GetAdminUserWorkoutPlans200ItemWorkoutDaysItemWeekDay = {
+  MONDAY: "MONDAY",
+  TUESDAY: "TUESDAY",
+  WEDNESDAY: "WEDNESDAY",
+  THURSDAY: "THURSDAY",
+  FRIDAY: "FRIDAY",
+  SATURDAY: "SATURDAY",
+  SUNDAY: "SUNDAY",
+} as const;
+
+export type GetAdminUserWorkoutPlans200ItemWorkoutDaysItemExercisesItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  order: number;
+  name: string;
+  sets: number;
+  reps: number;
+  restTimeInSeconds: number;
+  /** @nullable */
+  weightInKg: number | null;
+};
+
+export type GetAdminUserWorkoutPlans200ItemWorkoutDaysItem = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  weekDay: GetAdminUserWorkoutPlans200ItemWorkoutDaysItemWeekDay;
+  isRest: boolean;
+  estimatedDurationInSeconds: number;
+  exercises: GetAdminUserWorkoutPlans200ItemWorkoutDaysItemExercisesItem[];
+};
+
+export type GetAdminUserWorkoutPlans200Item = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  name: string;
+  isActive: boolean;
+  /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
+  createdAt: string;
+  workoutDays: GetAdminUserWorkoutPlans200ItemWorkoutDaysItem[];
+};
+
+export type GetAdminUserWorkoutPlans401 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminUserWorkoutPlans403 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminUserWorkoutPlans404 = {
+  error: string;
+  code: string;
+};
+
+export type GetAdminUserWorkoutPlans500 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateAdminWorkoutExerciseBody = {
+  /** @minLength 1 */
+  name?: string;
+  /**
+   * @minimum 1
+   * @maximum 9007199254740991
+   */
+  sets?: number;
+  /**
+   * @minimum 1
+   * @maximum 9007199254740991
+   */
+  reps?: number;
+  /**
+   * @minimum 1
+   * @maximum 9007199254740991
+   */
+  restTimeInSeconds?: number;
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  weightInKg?: number | null;
+};
+
+export type UpdateAdminWorkoutExercise200 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  order: number;
+  name: string;
+  sets: number;
+  reps: number;
+  restTimeInSeconds: number;
+  /** @nullable */
+  weightInKg: number | null;
+};
+
+export type UpdateAdminWorkoutExercise401 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateAdminWorkoutExercise403 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateAdminWorkoutExercise404 = {
+  error: string;
+  code: string;
+};
+
+export type UpdateAdminWorkoutExercise500 = {
+  error: string;
+  code: string;
+};
+
+export type DeleteAdminExercise200 = {
+  message: string;
+};
+
+export type DeleteAdminExercise401 = {
+  error: string;
+  code: string;
+};
+
+export type DeleteAdminExercise403 = {
+  error: string;
+  code: string;
+};
+
+export type DeleteAdminExercise404 = {
+  error: string;
+  code: string;
+};
+
+export type DeleteAdminExercise500 = {
+  error: string;
+  code: string;
+};
+
+export type AddAdminExerciseBody = {
+  /** @minLength 1 */
+  name: string;
+  /**
+   * @minimum 1
+   * @maximum 9007199254740991
+   */
+  sets: number;
+  /**
+   * @minimum 1
+   * @maximum 9007199254740991
+   */
+  reps: number;
+  /**
+   * @minimum 1
+   * @maximum 9007199254740991
+   */
+  restTimeInSeconds: number;
+  /**
+   * @minimum 0
+   * @nullable
+   */
+  weightInKg?: number | null;
+};
+
+export type AddAdminExercise201 = {
+  /** @pattern ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$ */
+  id: string;
+  order: number;
+  name: string;
+  sets: number;
+  reps: number;
+  restTimeInSeconds: number;
+  /** @nullable */
+  weightInKg: number | null;
+};
+
+export type AddAdminExercise401 = {
+  error: string;
+  code: string;
+};
+
+export type AddAdminExercise403 = {
+  error: string;
+  code: string;
+};
+
+export type AddAdminExercise404 = {
+  error: string;
+  code: string;
+};
+
+export type AddAdminExercise500 = {
+  error: string;
+  code: string;
+};
+
 export type GetAdminStripeLogsParams = {
   type?: string;
   /**
@@ -904,6 +1107,11 @@ export type GetSubscription200 = {
   stripeCustomerId: string | null;
   /** @nullable */
   subscriptionId: string | null;
+  /**
+   * @nullable
+   * @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$
+   */
+  currentPeriodEnd: string | null;
   /** @pattern ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?(?:Z))$ */
   trialEndsAt: string;
   isTrialActive: boolean;
@@ -1278,6 +1486,271 @@ export const unbanAdminUser = async (
     ...options,
     method: "POST",
   });
+};
+
+/**
+ * @summary List workout plans for a specific user
+ */
+export type getAdminUserWorkoutPlansResponse200 = {
+  data: GetAdminUserWorkoutPlans200Item[];
+  status: 200;
+};
+
+export type getAdminUserWorkoutPlansResponse401 = {
+  data: GetAdminUserWorkoutPlans401;
+  status: 401;
+};
+
+export type getAdminUserWorkoutPlansResponse403 = {
+  data: GetAdminUserWorkoutPlans403;
+  status: 403;
+};
+
+export type getAdminUserWorkoutPlansResponse404 = {
+  data: GetAdminUserWorkoutPlans404;
+  status: 404;
+};
+
+export type getAdminUserWorkoutPlansResponse500 = {
+  data: GetAdminUserWorkoutPlans500;
+  status: 500;
+};
+
+export type getAdminUserWorkoutPlansResponseSuccess =
+  getAdminUserWorkoutPlansResponse200 & {
+    headers: Headers;
+  };
+export type getAdminUserWorkoutPlansResponseError = (
+  | getAdminUserWorkoutPlansResponse401
+  | getAdminUserWorkoutPlansResponse403
+  | getAdminUserWorkoutPlansResponse404
+  | getAdminUserWorkoutPlansResponse500
+) & {
+  headers: Headers;
+};
+
+export type getAdminUserWorkoutPlansResponse =
+  | getAdminUserWorkoutPlansResponseSuccess
+  | getAdminUserWorkoutPlansResponseError;
+
+export const getGetAdminUserWorkoutPlansUrl = (userId: string) => {
+  return `/admin/users/${userId}/workout-plans`;
+};
+
+export const getAdminUserWorkoutPlans = async (
+  userId: string,
+  options?: RequestInit,
+): Promise<getAdminUserWorkoutPlansResponse> => {
+  return customFetch<getAdminUserWorkoutPlansResponse>(
+    getGetAdminUserWorkoutPlansUrl(userId),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+/**
+ * @summary Update a workout exercise for a specific user
+ */
+export type updateAdminWorkoutExerciseResponse200 = {
+  data: UpdateAdminWorkoutExercise200;
+  status: 200;
+};
+
+export type updateAdminWorkoutExerciseResponse401 = {
+  data: UpdateAdminWorkoutExercise401;
+  status: 401;
+};
+
+export type updateAdminWorkoutExerciseResponse403 = {
+  data: UpdateAdminWorkoutExercise403;
+  status: 403;
+};
+
+export type updateAdminWorkoutExerciseResponse404 = {
+  data: UpdateAdminWorkoutExercise404;
+  status: 404;
+};
+
+export type updateAdminWorkoutExerciseResponse500 = {
+  data: UpdateAdminWorkoutExercise500;
+  status: 500;
+};
+
+export type updateAdminWorkoutExerciseResponseSuccess =
+  updateAdminWorkoutExerciseResponse200 & {
+    headers: Headers;
+  };
+export type updateAdminWorkoutExerciseResponseError = (
+  | updateAdminWorkoutExerciseResponse401
+  | updateAdminWorkoutExerciseResponse403
+  | updateAdminWorkoutExerciseResponse404
+  | updateAdminWorkoutExerciseResponse500
+) & {
+  headers: Headers;
+};
+
+export type updateAdminWorkoutExerciseResponse =
+  | updateAdminWorkoutExerciseResponseSuccess
+  | updateAdminWorkoutExerciseResponseError;
+
+export const getUpdateAdminWorkoutExerciseUrl = (
+  userId: string,
+  exerciseId: string,
+) => {
+  return `/admin/users/${userId}/exercises/${exerciseId}`;
+};
+
+export const updateAdminWorkoutExercise = async (
+  userId: string,
+  exerciseId: string,
+  updateAdminWorkoutExerciseBody: UpdateAdminWorkoutExerciseBody,
+  options?: RequestInit,
+): Promise<updateAdminWorkoutExerciseResponse> => {
+  return customFetch<updateAdminWorkoutExerciseResponse>(
+    getUpdateAdminWorkoutExerciseUrl(userId, exerciseId),
+    {
+      ...options,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(updateAdminWorkoutExerciseBody),
+    },
+  );
+};
+
+/**
+ * @summary Delete a workout exercise for a specific user
+ */
+export type deleteAdminExerciseResponse200 = {
+  data: DeleteAdminExercise200;
+  status: 200;
+};
+
+export type deleteAdminExerciseResponse401 = {
+  data: DeleteAdminExercise401;
+  status: 401;
+};
+
+export type deleteAdminExerciseResponse403 = {
+  data: DeleteAdminExercise403;
+  status: 403;
+};
+
+export type deleteAdminExerciseResponse404 = {
+  data: DeleteAdminExercise404;
+  status: 404;
+};
+
+export type deleteAdminExerciseResponse500 = {
+  data: DeleteAdminExercise500;
+  status: 500;
+};
+
+export type deleteAdminExerciseResponseSuccess =
+  deleteAdminExerciseResponse200 & {
+    headers: Headers;
+  };
+export type deleteAdminExerciseResponseError = (
+  | deleteAdminExerciseResponse401
+  | deleteAdminExerciseResponse403
+  | deleteAdminExerciseResponse404
+  | deleteAdminExerciseResponse500
+) & {
+  headers: Headers;
+};
+
+export type deleteAdminExerciseResponse =
+  | deleteAdminExerciseResponseSuccess
+  | deleteAdminExerciseResponseError;
+
+export const getDeleteAdminExerciseUrl = (
+  userId: string,
+  exerciseId: string,
+) => {
+  return `/admin/users/${userId}/exercises/${exerciseId}`;
+};
+
+export const deleteAdminExercise = async (
+  userId: string,
+  exerciseId: string,
+  options?: RequestInit,
+): Promise<deleteAdminExerciseResponse> => {
+  return customFetch<deleteAdminExerciseResponse>(
+    getDeleteAdminExerciseUrl(userId, exerciseId),
+    {
+      ...options,
+      method: "DELETE",
+    },
+  );
+};
+
+/**
+ * @summary Add an exercise to a workout day for a specific user
+ */
+export type addAdminExerciseResponse201 = {
+  data: AddAdminExercise201;
+  status: 201;
+};
+
+export type addAdminExerciseResponse401 = {
+  data: AddAdminExercise401;
+  status: 401;
+};
+
+export type addAdminExerciseResponse403 = {
+  data: AddAdminExercise403;
+  status: 403;
+};
+
+export type addAdminExerciseResponse404 = {
+  data: AddAdminExercise404;
+  status: 404;
+};
+
+export type addAdminExerciseResponse500 = {
+  data: AddAdminExercise500;
+  status: 500;
+};
+
+export type addAdminExerciseResponseSuccess = addAdminExerciseResponse201 & {
+  headers: Headers;
+};
+export type addAdminExerciseResponseError = (
+  | addAdminExerciseResponse401
+  | addAdminExerciseResponse403
+  | addAdminExerciseResponse404
+  | addAdminExerciseResponse500
+) & {
+  headers: Headers;
+};
+
+export type addAdminExerciseResponse =
+  | addAdminExerciseResponseSuccess
+  | addAdminExerciseResponseError;
+
+export const getAddAdminExerciseUrl = (
+  userId: string,
+  workoutDayId: string,
+) => {
+  return `/admin/users/${userId}/days/${workoutDayId}/exercises`;
+};
+
+export const addAdminExercise = async (
+  userId: string,
+  workoutDayId: string,
+  addAdminExerciseBody: AddAdminExerciseBody,
+  options?: RequestInit,
+): Promise<addAdminExerciseResponse> => {
+  return customFetch<addAdminExerciseResponse>(
+    getAddAdminExerciseUrl(userId, workoutDayId),
+    {
+      ...options,
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...options?.headers },
+      body: JSON.stringify(addAdminExerciseBody),
+    },
+  );
 };
 
 /**
