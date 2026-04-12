@@ -40,6 +40,9 @@ export function UserDetailContent({ userId }: UserDetailContentProps) {
             queryKey: getGetAdminUserDetailQueryKey(userId),
           });
         },
+        onError: () => {
+          alert("Erro ao desbanir usuário. Tente novamente.");
+        },
       }
     );
   };

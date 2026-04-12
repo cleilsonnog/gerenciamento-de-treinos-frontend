@@ -3,8 +3,8 @@ import { redirect } from "next/navigation";
 
 import { authClient } from "@/app/_lib/auth-client";
 
-import { AdminShell } from "./_components/admin-shell";
-import { QueryProvider } from "./_components/query-provider";
+import { AdminShell } from "@/app/admin/_components/admin-shell";
+import { QueryProvider } from "@/app/admin/_components/query-provider";
 
 export default async function AdminLayout({
   children,

@@ -9,7 +9,7 @@ import { useChatState } from "./use-chat-state";
 import { ChatMessage } from "./chat-message";
 import { ChatInput } from "./chat-input";
 
-const SUGGESTED_MESSAGES = ["Monte meu plano de treino"];
+const SUGGESTED_MESSAGES = ["Monte meu plano de treino", "Adicionar um exercicio, me fale o nome do treino e qual exercicio você quer adicionar"];
 
 export function ChatOverlay() {
   const { chatOpen, chatInitialMessage, closeChat } = useChatState();

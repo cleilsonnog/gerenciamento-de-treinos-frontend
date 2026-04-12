@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -55,8 +56,11 @@ export function BanUserDialog({
 
   const { mutate: banUser, isPending } = useBanAdminUser();
 
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = (values: BanFormValues) => {
     if (!userId) return;
+    setError(null);
 
     banUser(
       {
@@ -73,6 +77,9 @@ export function BanUserDialog({
           form.reset();
           onClose();
           onSuccess();
+        },
+        onError: () => {
+          setError("Erro ao banir usuário. Tente novamente.");
         },
       }
     );
@@ -132,6 +139,9 @@ export function BanUserDialog({
                 </FormItem>
               )}
             />
+            {error && (
+              <p className="text-sm text-destructive">{error}</p>
+            )}
             <DialogFooter>
               <Button
                 type="button"
