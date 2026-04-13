@@ -23,11 +23,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import {
   type GetAdminUserWorkoutPlans200ItemWorkoutDaysItemExercisesItem,
   getGetAdminUserWorkoutPlansQueryKey,
   useUpdateAdminWorkoutExercise,
 } from "@/lib/api/rc-generated";
+import { ExerciseSearch } from "./exercise-search";
 
 const editExerciseSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -35,6 +37,7 @@ const editExerciseSchema = z.object({
   reps: z.number().int().min(1, "Mínimo 1 repetição"),
   restTimeInSeconds: z.number().int().min(1, "Mínimo 1 segundo"),
   weightInKg: z.number().min(0).nullable(),
+  gifUrl: z.string().nullable(),
 });
 
 type EditExerciseValues = z.infer<typeof editExerciseSchema>;
@@ -64,6 +67,7 @@ export function EditExerciseDialog({
           reps: exercise.reps,
           restTimeInSeconds: exercise.restTimeInSeconds,
           weightInKg: exercise.weightInKg,
+          gifUrl: exercise.gifUrl ?? null,
         }
       : undefined,
   });
@@ -85,6 +89,7 @@ export function EditExerciseDialog({
           reps: values.reps,
           restTimeInSeconds: values.restTimeInSeconds,
           weightInKg: values.weightInKg,
+          gifUrl: values.gifUrl,
         },
       },
       {
@@ -101,9 +106,11 @@ export function EditExerciseDialog({
     );
   };
 
+  const gifUrl = form.watch("gifUrl");
+
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Editar Exercício</DialogTitle>
         </DialogHeader>
@@ -112,6 +119,19 @@ export function EditExerciseDialog({
             onSubmit={form.handleSubmit(handleSubmit)}
             className="space-y-4"
           >
+            <div className="space-y-2">
+              <p className="text-sm font-medium">GIF do Exercício</p>
+              <ExerciseSearch
+                selectedGifUrl={gifUrl}
+                onSelect={(result) => {
+                  form.setValue("gifUrl", result.gifUrl);
+                }}
+                onClear={() => form.setValue("gifUrl", null)}
+              />
+            </div>
+
+            <Separator />
+
             <FormField
               control={form.control}
               name="name"

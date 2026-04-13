@@ -268,6 +268,8 @@ export type GetAdminUserWorkoutPlans200ItemWorkoutDaysItemExercisesItem = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type GetAdminUserWorkoutPlans200ItemWorkoutDaysItem = {
@@ -333,6 +335,8 @@ export type UpdateAdminWorkoutExerciseBody = {
    * @nullable
    */
   weightInKg?: number | null;
+  /** @nullable */
+  gifUrl?: string | null;
 };
 
 export type UpdateAdminWorkoutExercise200 = {
@@ -345,6 +349,8 @@ export type UpdateAdminWorkoutExercise200 = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type UpdateAdminWorkoutExercise401 = {
@@ -414,6 +420,8 @@ export type AddAdminExerciseBody = {
    * @nullable
    */
   weightInKg?: number | null;
+  /** @nullable */
+  gifUrl?: string | null;
 };
 
 export type AddAdminExercise201 = {
@@ -426,6 +434,8 @@ export type AddAdminExercise201 = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type AddAdminExercise401 = {
@@ -444,6 +454,35 @@ export type AddAdminExercise404 = {
 };
 
 export type AddAdminExercise500 = {
+  error: string;
+  code: string;
+};
+
+export type SearchExerciseDbParams = {
+  /**
+   * @minLength 1
+   */
+  q: string;
+};
+
+export type SearchExerciseDb200Item = {
+  name: string;
+  gifUrl: string;
+  bodyParts: string[];
+  targetMuscles: string[];
+};
+
+export type SearchExerciseDb401 = {
+  error: string;
+  code: string;
+};
+
+export type SearchExerciseDb403 = {
+  error: string;
+  code: string;
+};
+
+export type SearchExerciseDb500 = {
   error: string;
   code: string;
 };
@@ -743,6 +782,8 @@ export type GetWorkoutDay200ExercisesItem = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type GetWorkoutDay200SessionsItemSessionExercisesItem = {
@@ -2781,6 +2822,222 @@ export const useAddAdminExercise = <
 > => {
   return useMutation(getAddAdminExerciseMutationOptions(options), queryClient);
 };
+
+/**
+ * @summary Search exercises from ExerciseDB
+ */
+export type searchExerciseDbResponse200 = {
+  data: SearchExerciseDb200Item[];
+  status: 200;
+};
+
+export type searchExerciseDbResponse401 = {
+  data: SearchExerciseDb401;
+  status: 401;
+};
+
+export type searchExerciseDbResponse403 = {
+  data: SearchExerciseDb403;
+  status: 403;
+};
+
+export type searchExerciseDbResponse500 = {
+  data: SearchExerciseDb500;
+  status: 500;
+};
+
+export type searchExerciseDbResponseSuccess = searchExerciseDbResponse200 & {
+  headers: Headers;
+};
+export type searchExerciseDbResponseError = (
+  | searchExerciseDbResponse401
+  | searchExerciseDbResponse403
+  | searchExerciseDbResponse500
+) & {
+  headers: Headers;
+};
+
+export type searchExerciseDbResponse =
+  | searchExerciseDbResponseSuccess
+  | searchExerciseDbResponseError;
+
+export const getSearchExerciseDbUrl = (params: SearchExerciseDbParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/admin/exercises/search?${stringifiedParams}`
+    : `/admin/exercises/search`;
+};
+
+export const searchExerciseDb = async (
+  params: SearchExerciseDbParams,
+  options?: RequestInit,
+): Promise<searchExerciseDbResponse> => {
+  return customFetch<searchExerciseDbResponse>(getSearchExerciseDbUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getSearchExerciseDbQueryKey = (
+  params?: SearchExerciseDbParams,
+) => {
+  return [`/admin/exercises/search`, ...(params ? [params] : [])] as const;
+};
+
+export const getSearchExerciseDbQueryOptions = <
+  TData = Awaited<ReturnType<typeof searchExerciseDb>>,
+  TError = SearchExerciseDb401 | SearchExerciseDb403 | SearchExerciseDb500,
+>(
+  params: SearchExerciseDbParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof searchExerciseDb>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getSearchExerciseDbQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof searchExerciseDb>>
+  > = ({ signal }) => searchExerciseDb(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof searchExerciseDb>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type SearchExerciseDbQueryResult = NonNullable<
+  Awaited<ReturnType<typeof searchExerciseDb>>
+>;
+export type SearchExerciseDbQueryError =
+  | SearchExerciseDb401
+  | SearchExerciseDb403
+  | SearchExerciseDb500;
+
+export function useSearchExerciseDb<
+  TData = Awaited<ReturnType<typeof searchExerciseDb>>,
+  TError = SearchExerciseDb401 | SearchExerciseDb403 | SearchExerciseDb500,
+>(
+  params: SearchExerciseDbParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof searchExerciseDb>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof searchExerciseDb>>,
+          TError,
+          Awaited<ReturnType<typeof searchExerciseDb>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): DefinedUseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSearchExerciseDb<
+  TData = Awaited<ReturnType<typeof searchExerciseDb>>,
+  TError = SearchExerciseDb401 | SearchExerciseDb403 | SearchExerciseDb500,
+>(
+  params: SearchExerciseDbParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof searchExerciseDb>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof searchExerciseDb>>,
+          TError,
+          Awaited<ReturnType<typeof searchExerciseDb>>
+        >,
+        "initialData"
+      >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+export function useSearchExerciseDb<
+  TData = Awaited<ReturnType<typeof searchExerciseDb>>,
+  TError = SearchExerciseDb401 | SearchExerciseDb403 | SearchExerciseDb500,
+>(
+  params: SearchExerciseDbParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof searchExerciseDb>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+};
+/**
+ * @summary Search exercises from ExerciseDB
+ */
+
+export function useSearchExerciseDb<
+  TData = Awaited<ReturnType<typeof searchExerciseDb>>,
+  TError = SearchExerciseDb401 | SearchExerciseDb403 | SearchExerciseDb500,
+>(
+  params: SearchExerciseDbParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof searchExerciseDb>>,
+        TError,
+        TData
+      >
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+  queryClient?: QueryClient,
+): UseQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getSearchExerciseDbQueryOptions(params, options);
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
 
 /**
  * @summary Get Stripe event logs

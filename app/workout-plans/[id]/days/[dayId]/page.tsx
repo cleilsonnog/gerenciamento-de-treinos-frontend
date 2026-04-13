@@ -172,6 +172,7 @@ export default async function WorkoutDayPage({ params }: PageProps) {
               reps={exercise.reps}
               restTimeInSeconds={exercise.restTimeInSeconds}
               weightInKg={exercise.weightInKg}
+              gifUrl={exercise.gifUrl}
               workoutPlanId={id}
               workoutDayId={dayId}
               sessionId={activeSession?.id}

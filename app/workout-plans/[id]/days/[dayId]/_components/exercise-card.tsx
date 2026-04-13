@@ -1,9 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useTransition } from "react";
 import { CircleHelp, Weight, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { useChatState } from "@/app/_components/chat/use-chat-state";
 import { updateSessionExerciseAction } from "../_actions/update-session-exercise";
@@ -21,6 +28,7 @@ type ExerciseCardProps = {
   reps: number;
   restTimeInSeconds: number;
   weightInKg: number | null;
+  gifUrl?: string | null;
   workoutPlanId: string;
   workoutDayId: string;
   sessionId?: string;
@@ -35,6 +43,7 @@ export function ExerciseCard({
   reps,
   restTimeInSeconds,
   weightInKg,
+  gifUrl,
   workoutPlanId,
   workoutDayId,
   sessionId,
@@ -49,6 +58,7 @@ export function ExerciseCard({
   const [weightValue, setWeightValue] = useState(
     weightInKg?.toString() ?? "",
   );
+  const [showGif, setShowGif] = useState(false);
 
   const canCheck = !!sessionId && !!sessionExercise && isSessionActive;
 
@@ -80,59 +90,97 @@ export function ExerciseCard({
   };
 
   return (
-    <div
-      className={`flex flex-col gap-2 py-4 transition-opacity ${isCompleted ? "opacity-50" : ""}`}
-    >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {canCheck && (
-            <Checkbox
-              checked={isCompleted}
-              onCheckedChange={handleCheckChange}
-              disabled={isPending}
-            />
-          )}
-          <span
-            className={`text-base font-semibold ${isCompleted ? "line-through text-muted-foreground" : ""}`}
+    <>
+      <div
+        className={`flex flex-col gap-2 py-4 transition-opacity ${isCompleted ? "opacity-50" : ""}`}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {canCheck && (
+              <Checkbox
+                checked={isCompleted}
+                onCheckedChange={handleCheckChange}
+                disabled={isPending}
+              />
+            )}
+            {gifUrl && (
+              <button
+                type="button"
+                className="relative h-10 w-10 shrink-0 overflow-hidden rounded bg-muted transition-opacity hover:opacity-80"
+                onClick={() => setShowGif(true)}
+              >
+                <Image
+                  src={gifUrl}
+                  alt={name}
+                  fill
+                  sizes="40px"
+                  className="object-contain"
+                  unoptimized
+                />
+              </button>
+            )}
+            <span
+              className={`text-base font-semibold ${isCompleted ? "line-through text-muted-foreground" : ""}`}
+            >
+              {name}
+            </span>
+          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() =>
+              openChat(`Como executar o exercício ${name} corretamente?`)
+            }
           >
-            {name}
+            <CircleHelp size={20} className="text-muted-foreground" />
+          </Button>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
+            {sets} séries
           </span>
-        </div>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() =>
-            openChat(`Como executar o exercício ${name} corretamente?`)
-          }
-        >
-          <CircleHelp size={20} className="text-muted-foreground" />
-        </Button>
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-          {sets} séries
-        </span>
-        <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-          {reps} reps
-        </span>
-        <span className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
-          <Zap size={10} />
-          {restTimeInSeconds}s
-        </span>
-        <div className="flex items-center gap-1 ml-auto">
-          <Weight size={14} className="text-muted-foreground" />
-          <Input
-            type="number"
-            inputMode="decimal"
-            placeholder="kg"
-            value={weightValue}
-            onChange={(e) => setWeightValue(e.target.value)}
-            onBlur={handleWeightBlur}
-            disabled={isPending}
-            className="h-7 w-20 text-xs"
-          />
+          <span className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
+            {reps} reps
+          </span>
+          <span className="flex items-center gap-1 rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
+            <Zap size={10} />
+            {restTimeInSeconds}s
+          </span>
+          <div className="flex items-center gap-1 ml-auto">
+            <Weight size={14} className="text-muted-foreground" />
+            <Input
+              type="number"
+              inputMode="decimal"
+              placeholder="kg"
+              value={weightValue}
+              onChange={(e) => setWeightValue(e.target.value)}
+              onBlur={handleWeightBlur}
+              disabled={isPending}
+              className="h-7 w-20 text-xs"
+            />
+          </div>
         </div>
       </div>
-    </div>
+
+      {gifUrl && (
+        <Dialog open={showGif} onOpenChange={setShowGif}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>{name}</DialogTitle>
+            </DialogHeader>
+            <div className="relative aspect-square w-full overflow-hidden rounded-lg">
+              <Image
+                src={gifUrl}
+                alt={name}
+                fill
+                sizes="(max-width: 448px) 100vw, 448px"
+                className="object-contain"
+                unoptimized
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 }

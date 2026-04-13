@@ -2,6 +2,7 @@
 
 import { useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import Image from "next/image";
 import { Dumbbell, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 
@@ -29,6 +30,7 @@ import {
 } from "@/lib/api/rc-generated";
 import { AddExerciseDialog } from "./add-exercise-dialog";
 import { EditExerciseDialog } from "./edit-exercise-dialog";
+import { ExerciseGifDialog } from "./exercise-gif-dialog";
 
 const weekDayLabels: Record<string, string> = {
   MONDAY: "Segunda",
@@ -55,6 +57,11 @@ export function UserWorkoutPlans({ userId }: UserWorkoutPlansProps) {
 
   const [addingToDay, setAddingToDay] = useState<{
     id: string;
+    name: string;
+  } | null>(null);
+
+  const [viewingGif, setViewingGif] = useState<{
+    gifUrl: string;
     name: string;
   } | null>(null);
 
@@ -175,16 +182,39 @@ export function UserWorkoutPlans({ userId }: UserWorkoutPlansProps) {
                                 key={exercise.id}
                                 className="flex items-center justify-between rounded-md border px-3 py-2"
                               >
-                                <div className="space-y-0.5">
-                                  <p className="text-sm font-medium">
-                                    {exercise.name}
-                                  </p>
-                                  <p className="text-xs text-muted-foreground">
-                                    {exercise.sets}x{exercise.reps}
-                                    {exercise.weightInKg !== null &&
-                                      ` • ${exercise.weightInKg}kg`}
-                                    {` • ${exercise.restTimeInSeconds}s descanso`}
-                                  </p>
+                                <div className="flex items-center gap-3">
+                                  {exercise.gifUrl && (
+                                    <button
+                                      type="button"
+                                      className="relative h-10 w-10 shrink-0 overflow-hidden rounded bg-muted transition-opacity hover:opacity-80"
+                                      onClick={() =>
+                                        setViewingGif({
+                                          gifUrl: exercise.gifUrl!,
+                                          name: exercise.name,
+                                        })
+                                      }
+                                    >
+                                      <Image
+                                        src={exercise.gifUrl}
+                                        alt={exercise.name}
+                                        fill
+                                        sizes="40px"
+                                        className="object-contain"
+                                        unoptimized
+                                      />
+                                    </button>
+                                  )}
+                                  <div className="space-y-0.5">
+                                    <p className="text-sm font-medium">
+                                      {exercise.name}
+                                    </p>
+                                    <p className="text-xs text-muted-foreground">
+                                      {exercise.sets}x{exercise.reps}
+                                      {exercise.weightInKg !== null &&
+                                        ` • ${exercise.weightInKg}kg`}
+                                      {` • ${exercise.restTimeInSeconds}s descanso`}
+                                    </p>
+                                  </div>
                                 </div>
                                 <div className="flex items-center gap-1">
                                   <Button
@@ -234,6 +264,13 @@ export function UserWorkoutPlans({ userId }: UserWorkoutPlansProps) {
         workoutDayName={addingToDay?.name ?? ""}
         open={addingToDay !== null}
         onClose={() => setAddingToDay(null)}
+      />
+
+      <ExerciseGifDialog
+        gifUrl={viewingGif?.gifUrl ?? null}
+        exerciseName={viewingGif?.name ?? ""}
+        open={viewingGif !== null}
+        onClose={() => setViewingGif(null)}
       />
     </>
   );

@@ -252,6 +252,8 @@ export type GetAdminUserWorkoutPlans200ItemWorkoutDaysItemExercisesItem = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type GetAdminUserWorkoutPlans200ItemWorkoutDaysItem = {
@@ -317,6 +319,8 @@ export type UpdateAdminWorkoutExerciseBody = {
    * @nullable
    */
   weightInKg?: number | null;
+  /** @nullable */
+  gifUrl?: string | null;
 };
 
 export type UpdateAdminWorkoutExercise200 = {
@@ -329,6 +333,8 @@ export type UpdateAdminWorkoutExercise200 = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type UpdateAdminWorkoutExercise401 = {
@@ -398,6 +404,8 @@ export type AddAdminExerciseBody = {
    * @nullable
    */
   weightInKg?: number | null;
+  /** @nullable */
+  gifUrl?: string | null;
 };
 
 export type AddAdminExercise201 = {
@@ -410,6 +418,8 @@ export type AddAdminExercise201 = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type AddAdminExercise401 = {
@@ -428,6 +438,35 @@ export type AddAdminExercise404 = {
 };
 
 export type AddAdminExercise500 = {
+  error: string;
+  code: string;
+};
+
+export type SearchExerciseDbParams = {
+  /**
+   * @minLength 1
+   */
+  q: string;
+};
+
+export type SearchExerciseDb200Item = {
+  name: string;
+  gifUrl: string;
+  bodyParts: string[];
+  targetMuscles: string[];
+};
+
+export type SearchExerciseDb401 = {
+  error: string;
+  code: string;
+};
+
+export type SearchExerciseDb403 = {
+  error: string;
+  code: string;
+};
+
+export type SearchExerciseDb500 = {
   error: string;
   code: string;
 };
@@ -727,6 +766,8 @@ export type GetWorkoutDay200ExercisesItem = {
   restTimeInSeconds: number;
   /** @nullable */
   weightInKg: number | null;
+  /** @nullable */
+  gifUrl: string | null;
 };
 
 export type GetWorkoutDay200SessionsItemSessionExercisesItem = {
@@ -1751,6 +1792,70 @@ export const addAdminExercise = async (
       body: JSON.stringify(addAdminExerciseBody),
     },
   );
+};
+
+/**
+ * @summary Search exercises from ExerciseDB
+ */
+export type searchExerciseDbResponse200 = {
+  data: SearchExerciseDb200Item[];
+  status: 200;
+};
+
+export type searchExerciseDbResponse401 = {
+  data: SearchExerciseDb401;
+  status: 401;
+};
+
+export type searchExerciseDbResponse403 = {
+  data: SearchExerciseDb403;
+  status: 403;
+};
+
+export type searchExerciseDbResponse500 = {
+  data: SearchExerciseDb500;
+  status: 500;
+};
+
+export type searchExerciseDbResponseSuccess = searchExerciseDbResponse200 & {
+  headers: Headers;
+};
+export type searchExerciseDbResponseError = (
+  | searchExerciseDbResponse401
+  | searchExerciseDbResponse403
+  | searchExerciseDbResponse500
+) & {
+  headers: Headers;
+};
+
+export type searchExerciseDbResponse =
+  | searchExerciseDbResponseSuccess
+  | searchExerciseDbResponseError;
+
+export const getSearchExerciseDbUrl = (params: SearchExerciseDbParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/admin/exercises/search?${stringifiedParams}`
+    : `/admin/exercises/search`;
+};
+
+export const searchExerciseDb = async (
+  params: SearchExerciseDbParams,
+  options?: RequestInit,
+): Promise<searchExerciseDbResponse> => {
+  return customFetch<searchExerciseDbResponse>(getSearchExerciseDbUrl(params), {
+    ...options,
+    method: "GET",
+  });
 };
 
 /**
