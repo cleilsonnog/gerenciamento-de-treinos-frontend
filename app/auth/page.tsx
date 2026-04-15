@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/app/_lib/auth-client";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -18,18 +18,25 @@ const GoogleIcon = () => (
 
 const AuthPage = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session, isPending } = authClient.useSession();
 
   useEffect(() => {
+    if (searchParams.get("error") === "banned") {
+      router.replace("/banned");
+      return;
+    }
+
     if (!isPending && session) {
       router.replace(`${process.env.NEXT_PUBLIC_BASE_URL}/`);
     }
-  }, [session, isPending, router]);
+  }, [session, isPending, router, searchParams]);
 
   const handleGoogleSignIn = async () => {
     const { error } = await authClient.signIn.social({
       provider: "google",
       callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+      errorCallbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}/auth`,
     });
     if (error) {
       console.error(error);
@@ -78,4 +85,12 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+const AuthPageWrapper = () => {
+  return (
+    <Suspense>
+      <AuthPage />
+    </Suspense>
+  );
+};
+
+export default AuthPageWrapper;
