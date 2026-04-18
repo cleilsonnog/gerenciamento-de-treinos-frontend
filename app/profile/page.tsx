@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { Weight, Ruler, BicepsFlexed, User, Settings, ShieldCheck } from "lucide-react";
+import { Weight, Ruler, BicepsFlexed, User, Settings, ShieldCheck, MessageCircle } from "lucide-react";
 import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
 import { getUserTrainData, getHome } from "@/app/_lib/api/fetch-generated";
@@ -133,6 +133,13 @@ export default async function ProfilePage() {
           <StatCard icon={BicepsFlexed} value={bodyFat} unit="Gc" />
           <StatCard icon={User} value={age} unit="Anos" />
         </div>
+
+        <Button asChild variant="outline" className="w-full">
+          <Link href="/contact">
+            <MessageCircle size={18} />
+            Fale Conosco
+          </Link>
+        </Button>
 
         {user.role === "admin" && (
           <Button asChild variant="outline" className="w-full">
