@@ -15,6 +15,7 @@ interface SettingsButtonProps {
     heightInCentimeters: number;
     age: number;
     bodyFatPercentage: number | null;
+    gender: string | null;
   };
 }
 

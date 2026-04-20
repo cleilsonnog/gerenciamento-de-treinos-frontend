@@ -121,6 +121,7 @@ export default async function ProfilePage() {
               heightInCentimeters: trainData!.heightInCentimeters,
               age: trainData!.age,
               bodyFatPercentage: trainData!.bodyFatPercentage,
+              gender: trainData!.gender,
             }}
           />
         </div>

@@ -450,10 +450,9 @@ export type SearchExerciseDbParams = {
 };
 
 export type SearchExerciseDb200Item = {
+  exerciseId: string;
   name: string;
   gifUrl: string;
-  bodyParts: string[];
-  targetMuscles: string[];
 };
 
 export type SearchExerciseDb401 = {
@@ -1044,6 +1043,8 @@ export type GetUserTrainData200 = {
   age: number;
   /** @nullable */
   bodyFatPercentage: number | null;
+  /** @nullable */
+  gender: "MALE" | "FEMALE" | "PREFER_NOT_TO_SAY" | null;
 } | null;
 
 export type GetUserTrainData401 = {
@@ -1055,6 +1056,19 @@ export type GetUserTrainData500 = {
   error: string;
   code: string;
 };
+
+/**
+ * @nullable
+ */
+export type UpsertUserTrainDataBodyGender =
+  | (typeof UpsertUserTrainDataBodyGender)[keyof typeof UpsertUserTrainDataBodyGender]
+  | null;
+
+export const UpsertUserTrainDataBodyGender = {
+  MALE: "MALE",
+  FEMALE: "FEMALE",
+  PREFER_NOT_TO_SAY: "PREFER_NOT_TO_SAY",
+} as const;
 
 export type UpsertUserTrainDataBody = {
   /** @maximum 9007199254740991 */
@@ -1069,7 +1083,22 @@ export type UpsertUserTrainDataBody = {
    * @nullable
    */
   bodyFatPercentage?: number | null;
+  /** @nullable */
+  gender?: UpsertUserTrainDataBodyGender;
 };
+
+/**
+ * @nullable
+ */
+export type UpsertUserTrainData200Gender =
+  | (typeof UpsertUserTrainData200Gender)[keyof typeof UpsertUserTrainData200Gender]
+  | null;
+
+export const UpsertUserTrainData200Gender = {
+  MALE: "MALE",
+  FEMALE: "FEMALE",
+  PREFER_NOT_TO_SAY: "PREFER_NOT_TO_SAY",
+} as const;
 
 export type UpsertUserTrainData200 = {
   userId: string;
@@ -1078,6 +1107,8 @@ export type UpsertUserTrainData200 = {
   age: number;
   /** @nullable */
   bodyFatPercentage: number | null;
+  /** @nullable */
+  gender: UpsertUserTrainData200Gender;
 };
 
 export type UpsertUserTrainData401 = {

@@ -25,15 +25,30 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   getGetUserTrainDataQueryKey,
+  type UpsertUserTrainDataBodyGender,
   useUpsertUserTrainData,
 } from "@/lib/api/rc-generated";
+
+const GENDER_OPTIONS = [
+  { value: "MALE", label: "Masculino" },
+  { value: "FEMALE", label: "Feminino" },
+  { value: "PREFER_NOT_TO_SAY", label: "Prefiro não dizer" },
+] as const;
 
 const settingsSchema = z.object({
   weightInKg: z.number().positive("Peso deve ser maior que 0"),
   heightInCentimeters: z.number().int().positive("Altura deve ser maior que 0"),
   age: z.number().int().positive("Idade deve ser maior que 0"),
   bodyFatPercentage: z.number().int().min(0).max(100).nullable(),
+  gender: z.enum(["MALE", "FEMALE", "PREFER_NOT_TO_SAY"]).nullable(),
 });
 
 type SettingsValues = z.infer<typeof settingsSchema>;
@@ -46,6 +61,7 @@ interface SettingsDialogProps {
     heightInCentimeters: number;
     age: number;
     bodyFatPercentage: number | null;
+    gender: string | null;
   };
 }
 
@@ -65,6 +81,7 @@ export function SettingsDialog({
       heightInCentimeters: initialData.heightInCentimeters,
       age: initialData.age,
       bodyFatPercentage: initialData.bodyFatPercentage,
+      gender: (initialData.gender as SettingsValues["gender"]) ?? null,
     },
   });
 
@@ -80,6 +97,7 @@ export function SettingsDialog({
           heightInCentimeters: values.heightInCentimeters,
           age: values.age,
           bodyFatPercentage: values.bodyFatPercentage,
+          gender: values.gender as UpsertUserTrainDataBodyGender | undefined,
         },
       },
       {
@@ -186,6 +204,35 @@ export function SettingsDialog({
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sexo</FormLabel>
+                  <Select
+                    value={field.value ?? ""}
+                    onValueChange={(val) =>
+                      field.onChange(val === "" ? null : val)
+                    }
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecione" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {GENDER_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {error && <p className="text-sm text-destructive">{error}</p>}
             <DialogFooter>
               <Button
