@@ -118,12 +118,12 @@ export default async function Home() {
           <span className="text-lg font-semibold text-foreground">
             Treino de Hoje
           </span>
-          <button
-            type="button"
+          <Link
+            href={`/workout-plans/${homeData.activeWorkoutPlanId}`}
             className="text-xs text-primary"
           >
             Ver treinos
-          </button>
+          </Link>
         </div>
         {homeData.todayWorkoutDay ? (
           <WorkoutDayCard workoutDay={homeData.todayWorkoutDay} />

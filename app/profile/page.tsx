@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { Weight, Ruler, BicepsFlexed, User, Settings, ShieldCheck, MessageCircle } from "lucide-react";
+import { Weight, Ruler, BicepsFlexed, User, ShieldCheck, MessageCircle } from "lucide-react";
 import dayjs from "dayjs";
 import { authClient } from "@/app/_lib/auth-client";
 import { getUserTrainData, getHome } from "@/app/_lib/api/fetch-generated";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { BottomNav } from "@/app/_components/bottom-nav";
 import { StatCard } from "./_components/stat-card";
 import { LogoutButton } from "./_components/logout-button";
+import { SettingsButton } from "./_components/settings-button";
 import { SubscriptionCard } from "./_components/subscription-card";
 import { customFetch } from "@/app/_lib/fetch";
 
@@ -114,9 +115,14 @@ export default async function ProfilePage() {
               </span>
             </div>
           </div>
-          <Button variant="ghost" size="icon" className="size-11">
-            <Settings size={20} className="text-foreground" />
-          </Button>
+          <SettingsButton
+            trainData={{
+              weightInGrams: trainData!.weightInGrams,
+              heightInCentimeters: trainData!.heightInCentimeters,
+              age: trainData!.age,
+              bodyFatPercentage: trainData!.bodyFatPercentage,
+            }}
+          />
         </div>
 
         <SubscriptionCard
