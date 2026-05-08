@@ -7,6 +7,7 @@ import { AiSection } from "./_components/ai-section";
 import { PricingSection } from "./_components/pricing-section";
 import { ContactSection } from "./_components/contact-section";
 import { Footer } from "./_components/footer";
+import { WhatsappFloatButton } from "@/components/whatsapp-float-button";
 
 export default function LandingPage() {
   return (
@@ -20,6 +21,7 @@ export default function LandingPage() {
       <PricingSection />
       <ContactSection />
       <Footer />
+      <WhatsappFloatButton />
     </div>
   );
 }

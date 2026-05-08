@@ -12,6 +12,7 @@ import { StatCard } from "./_components/stat-card";
 import { LogoutButton } from "./_components/logout-button";
 import { SettingsButton } from "./_components/settings-button";
 import { SubscriptionCard } from "./_components/subscription-card";
+import { WhatsappFloatButton } from "@/components/whatsapp-float-button";
 import { customFetch } from "@/app/_lib/fetch";
 
 interface SubscriptionData {
@@ -160,6 +161,7 @@ export default async function ProfilePage() {
         <LogoutButton />
       </section>
 
+      <WhatsappFloatButton />
       <BottomNav />
     </div>
   );
