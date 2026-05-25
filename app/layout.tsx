@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { QueryProvider } from "./_components/query-provider";
 import { ChatProvider } from "./_components/chat/chat-provider";
 import { InstallPromptDialog } from "./_components/install-prompt-dialog";
 import "./globals.css";
@@ -74,11 +75,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NuqsAdapter>
-          {children}
-          <ChatProvider />
-          <InstallPromptDialog />
-        </NuqsAdapter>
+        <QueryProvider>
+          <NuqsAdapter>
+            {children}
+            <ChatProvider />
+            <InstallPromptDialog />
+          </NuqsAdapter>
+        </QueryProvider>
       </body>
     </html>
   );

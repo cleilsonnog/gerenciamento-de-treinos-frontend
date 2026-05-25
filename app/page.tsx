@@ -49,7 +49,8 @@ export default async function Home() {
       : consistency?.workoutDayStarted
         ? ("started" as const)
         : ("empty" as const);
-    return { label: WEEK_DAY_LABELS[i], status };
+    const dayNumber = monday.add(i, "day").date();
+    return { label: WEEK_DAY_LABELS[i], dayNumber, status };
   });
 
   const userName = session.data.user.name?.split(" ")[0] ?? "Você";
@@ -101,7 +102,7 @@ export default async function Home() {
         <div className="flex gap-3">
           <div className="flex flex-1 items-center justify-between rounded-xl border border-border px-5 py-5">
             {weekDays.map((day, i) => (
-              <ConsistencyDay key={i} label={day.label} status={day.status} />
+              <ConsistencyDay key={i} label={day.label} dayNumber={day.dayNumber} status={day.status} />
             ))}
           </div>
           <div className="flex w-20 flex-col items-center justify-center gap-1 rounded-xl bg-streak px-4 py-5">
@@ -136,13 +137,7 @@ export default async function Home() {
         )}
       </section>
 
-      <BottomNav
-        calendarHref={
-          homeData.todayWorkoutDay
-            ? `/workout-plans/${homeData.todayWorkoutDay.workoutPlanId}`
-            : undefined
-        }
-      />
+      <BottomNav />
     </div>
   );
 }

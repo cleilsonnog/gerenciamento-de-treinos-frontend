@@ -117,18 +117,26 @@ export function ConsistencyHeatmap({
                   const isCompleted = consistency?.workoutDayCompleted;
                   const isStarted = consistency?.workoutDayStarted;
 
+                  const dayNumber = dayjs(date).date();
+
                   return (
                     <div
                       key={dayIdx}
                       className={cn(
-                        "h-5 w-5 rounded-[4px]",
+                        "flex h-5 w-5 items-center justify-center rounded-[4px]",
                         isCompleted
                           ? "bg-primary"
                           : isStarted
                             ? "bg-primary/30"
                             : "border border-border"
                       )}
-                    />
+                    >
+                      {!isCompleted && !isStarted && (
+                        <span className="text-[8px] leading-none text-muted-foreground">
+                          {dayNumber}
+                        </span>
+                      )}
+                    </div>
                   );
                 })}
               </div>
