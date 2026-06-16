@@ -17,9 +17,8 @@ interface SubscriptionCardProps {
 
 const PLAN_LABELS: Record<string, string> = {
   FREE: "Gratuito",
-  MONTHLY: "Mensal",
-  QUARTERLY: "Trimestral",
   YEARLY: "Anual",
+  LIFETIME: "Vitalício",
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -50,9 +49,9 @@ export function SubscriptionCard({
     ? dayjs(trialEndsAt).diff(dayjs(), "day")
     : 0;
 
-  const otherPlan = plan === "MONTHLY" ? "YEARLY" : "MONTHLY";
+  const otherPlan = plan === "YEARLY" ? "LIFETIME" : "YEARLY";
   const otherPlanLabel = PLAN_LABELS[otherPlan];
-  const otherPlanPrice = otherPlan === "MONTHLY" ? "R$ 9,90/mês" : "R$ 99,00/ano";
+  const otherPlanPrice = otherPlan === "YEARLY" ? "R$ 27,00/ano" : "R$ 47,00 (vitalício)";
 
   const handleCancel = async () => {
     if (!confirm("Tem certeza que deseja cancelar sua assinatura?")) return;
