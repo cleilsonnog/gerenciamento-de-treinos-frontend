@@ -27,7 +27,7 @@ This is a **Next.js 15 App Router** project using **React 19** and **TypeScript*
 
 Auth is handled by **BetterAuth** via `authClient` exported from `app/_lib/auth-client.ts`. The client connects to `NEXT_PUBLIC_API_URL`. Session checks use `authClient.useSession()` in Client Components — never use middleware for auth.
 
-### API Layer (planned)
+### API Layer
 
 **Orval** generates typed fetch functions and TanStack Query hooks from the backend OpenAPI spec:
 - Server-side fetching: functions from `@app/_lib/api/fetch-generated/index.ts`
