@@ -95,9 +95,8 @@ export function UsersContent() {
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="FREE">Free</SelectItem>
-            <SelectItem value="MONTHLY">Mensal</SelectItem>
-            <SelectItem value="QUARTERLY">Trimestral</SelectItem>
             <SelectItem value="YEARLY">Anual</SelectItem>
+            <SelectItem value="LIFETIME">Vitalício</SelectItem>
           </SelectContent>
         </Select>
         <Select
@@ -248,9 +247,8 @@ export function UsersContent() {
 function PlanBadge({ plan }: { plan: string }) {
   const labels: Record<string, string> = {
     FREE: "Free",
-    MONTHLY: "Mensal",
-    QUARTERLY: "Trimestral",
     YEARLY: "Anual",
+    LIFETIME: "Vitalício",
   };
 
   return (

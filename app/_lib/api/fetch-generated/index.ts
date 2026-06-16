@@ -51,9 +51,8 @@ export type ListAdminUsers200UsersItemPlan =
 
 export const ListAdminUsers200UsersItemPlan = {
   FREE: "FREE",
-  MONTHLY: "MONTHLY",
-  QUARTERLY: "QUARTERLY",
   YEARLY: "YEARLY",
+  LIFETIME: "LIFETIME",
 } as const;
 
 /**
@@ -113,9 +112,8 @@ export type GetAdminUserDetail200Plan =
 
 export const GetAdminUserDetail200Plan = {
   FREE: "FREE",
-  MONTHLY: "MONTHLY",
-  QUARTERLY: "QUARTERLY",
   YEARLY: "YEARLY",
+  LIFETIME: "LIFETIME",
 } as const;
 
 /**
@@ -1125,8 +1123,8 @@ export type PostCreateCheckoutSessionBodyPlan =
   (typeof PostCreateCheckoutSessionBodyPlan)[keyof typeof PostCreateCheckoutSessionBodyPlan];
 
 export const PostCreateCheckoutSessionBodyPlan = {
-  MONTHLY: "MONTHLY",
   YEARLY: "YEARLY",
+  LIFETIME: "LIFETIME",
 } as const;
 
 export type PostCreateCheckoutSessionBody = {
@@ -1152,9 +1150,8 @@ export type GetSubscription200Plan =
 
 export const GetSubscription200Plan = {
   FREE: "FREE",
-  MONTHLY: "MONTHLY",
-  QUARTERLY: "QUARTERLY",
   YEARLY: "YEARLY",
+  LIFETIME: "LIFETIME",
 } as const;
 
 /**
@@ -1233,8 +1230,8 @@ export type PostChangePlanBodyPlan =
   (typeof PostChangePlanBodyPlan)[keyof typeof PostChangePlanBodyPlan];
 
 export const PostChangePlanBodyPlan = {
-  MONTHLY: "MONTHLY",
   YEARLY: "YEARLY",
+  LIFETIME: "LIFETIME",
 } as const;
 
 export type PostChangePlanBody = {
@@ -1246,9 +1243,8 @@ export type PostChangePlan200Plan =
 
 export const PostChangePlan200Plan = {
   FREE: "FREE",
-  MONTHLY: "MONTHLY",
-  QUARTERLY: "QUARTERLY",
   YEARLY: "YEARLY",
+  LIFETIME: "LIFETIME",
 } as const;
 
 export type PostChangePlan200 = {

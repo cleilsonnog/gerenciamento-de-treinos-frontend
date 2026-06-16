@@ -56,9 +56,8 @@ export function UserDetailContent({ userId }: UserDetailContentProps) {
 
   const planLabels: Record<string, string> = {
     FREE: "Free",
-    MONTHLY: "Mensal",
-    QUARTERLY: "Trimestral",
     YEARLY: "Anual",
+    LIFETIME: "Vitalício",
   };
 
   return (

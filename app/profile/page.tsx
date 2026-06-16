@@ -77,13 +77,11 @@ export default async function ProfilePage() {
     subscriptionResponse.status === 200 ? subscriptionResponse.data : null;
 
   const planLabel =
-    subscription?.plan === "MONTHLY"
-      ? "Mensal"
-      : subscription?.plan === "YEARLY"
-        ? "Anual"
-        : subscription?.plan === "QUARTERLY"
-          ? "Trimestral"
-          : "Gratuito";
+    subscription?.plan === "YEARLY"
+      ? "Anual"
+      : subscription?.plan === "LIFETIME"
+        ? "Vitalício"
+        : "Gratuito";
 
   const weightInKg = trainData
     ? (trainData.weightInGrams / 1000).toFixed(1)
